@@ -134,12 +134,15 @@
     <ul class="dropdown-menu">
       {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
       {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
+      <li><a class="dropdown-item" href="/your_contribution" name="contri"> Your Contributions</a></li>
       <li><a class="dropdown-item" href="/signout">Sign out</a></li>
     </ul>
     {% else %}
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
       <li><a class="dropdown-item" href="/signin">Sign in</a></li>
+      
+      
       {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
     </ul>
     {% endif %}

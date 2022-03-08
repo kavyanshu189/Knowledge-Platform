@@ -36,6 +36,8 @@ from simple_salesforce import Salesforce
 import requests
 from authentication.models import Contribute
 
+gfName=""
+
 # Create your views here.
 def index(request):
     return render(request, "authentication/index.html")
@@ -222,7 +224,8 @@ def opportunity(request):
 def index(request):
     print(request.user)
     return render(request, "authentication/index.html")
-
+# global username5
+global fname
 def signin(request):  
      
     if request.method == 'POST':
@@ -236,6 +239,13 @@ def signin(request):
         if user is not None:
              login(request, user)
              fname = user.first_name
+             global gfName
+             if '@' in fname:
+                s=fname.split('@')
+                gfName=s[0].capitallize()
+             else:
+                gfName=fname
+            #  gfName+=str(fname)
              current_user = {}
              global username1
              username1=username
@@ -392,9 +402,24 @@ def search(request):
     if request.method=="POST":
         searched=request.POST['searched']
         #login=Contribute.objects.filter(ptype__contains=searched) 
-        defectdata =collection.find({'ptype':searched})
+        defectdata =collection.find({'owner':searched})
         # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
         return render(request,'authentication/search.html',{'searched':searched,'defectdata': defectdata.clone()})
     else:
         return render(request,'authentication/search.html') 
+
+def your_Contribution(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    
+    
+    owner = gfName
+    print(owner)
+    #login=Contribute.objects.filter(ptype__contains=searched) 
+    defectdata =collection.find({'owner':owner})
+    # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
+    return render(request,'authentication/your_contribution.html',{'defectdata': defectdata.clone()})
+    # else:
+    #     return render(request,'authentication/your_contribution.html')         
     
