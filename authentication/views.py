@@ -220,14 +220,8 @@ def opportunity(request):
     return render(request, 'knowledgepages/opportunity.html', {'opportunitydata': opportunitydata.clone()})
 
 
-    
-def index(request):
-    print(request.user)
-    return render(request, "authentication/index.html")
-# global username5
 global fname
-def signin(request):  
-     
+def signin(request):       
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
@@ -402,7 +396,7 @@ def search(request):
     if request.method=="POST":
         searched=request.POST['searched']
         #login=Contribute.objects.filter(ptype__contains=searched) 
-        defectdata =collection.find({'owner':searched})
+        defectdata =collection.find({'ptype':searched})
         # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
         return render(request,'authentication/search.html',{'searched':searched,'defectdata': defectdata.clone()})
     else:
@@ -420,6 +414,4 @@ def your_Contribution(request):
     defectdata =collection.find({'owner':owner})
     # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
     return render(request,'authentication/your_contribution.html',{'defectdata': defectdata.clone()})
-    # else:
-    #     return render(request,'authentication/your_contribution.html')         
     
