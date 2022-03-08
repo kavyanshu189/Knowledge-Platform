@@ -30,5 +30,6 @@ urlpatterns = [
    path('salesforce', views.salesforce,name='salesforce'),
    path('salesforcedisplay', views.salesforcedisplay,name='salesforcedisplay'),
    path('search', views.search, name="search"),
+   path('your_contribution', views.your_Contribution, name="contri"),
    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
