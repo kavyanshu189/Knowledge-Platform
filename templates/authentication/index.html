@@ -59,6 +59,21 @@
   color: #000000;
   transform: rotateY(180deg);
 }
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
 </style>
 
 
@@ -308,5 +323,31 @@
 </div>
 
     </div>
+    <center>
+      <table>
+          <tr>
+            <th>Contributer Name</th>
+            <th>Problem Type</th>
+            <th>Problem Summary</th>
+            <th>Problem Description</th>
+            <th>Knowledge Analysis</th>
+            <th>Knowledge Insights</th>
+          </tr>
+          
+          {% for x in defectdata %}
+          <tr>
+            <td>{{x.owner}}</td>
+            <td>{{x.ptype}}</td>
+            <td>{{x.psummary}}</td>
+            <td>{{x.pdescription}}</td>
+            <td>{{x.kanalysis}}</td>
+            <td>{{x.kinsisghts}}</td>
+          </tr>
+          
+          {%endfor%}
+      
+        </table>
+        </center>
+      
 </body>
 </html>

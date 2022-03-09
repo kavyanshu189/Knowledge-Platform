@@ -40,7 +40,11 @@ gfName=""
 
 # Create your views here.
 def index(request):
-    return render(request, "authentication/index.html")
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    coll =collection.find()
+    return render(request, "authentication/index.html", {'defectdata': coll.clone()})
 
 def about(request):
     return render(request, 'authentication/about.html') 
@@ -414,4 +418,12 @@ def your_Contribution(request):
     defectdata =collection.find({'owner':owner})
     # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
     return render(request,'authentication/your_contribution.html',{'defectdata': defectdata.clone()})
-    
+
+def update_contribution(request):
+    conn=MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    if request.method=="POST":
+        kid=request.POST['kid']
+        print(kid)
+    return render(request,'authentication/update_contribution.html')

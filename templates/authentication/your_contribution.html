@@ -102,6 +102,7 @@
     <center  >
       <table>
         <tr>
+          {% comment %} <th>Id</th> {% endcomment %}
           <th>Problem Type</th>
           <th>Problem Summary</th>
           <th>Problem Description</th>
@@ -111,6 +112,8 @@
         {% for x in defectdata %}
     
         <tr>
+          {% comment %} <td>{{ObjectId(id)}}</td> {% endcomment %}
+          {% comment %} <td>{{x.__id}}</td> {% endcomment %}
           <td>{{x.ptype}}</td>
           <td>{{x.psummary}}</td>
           <td>{{x.pdescription}}</td>
@@ -120,7 +123,7 @@
         {%endfor%}
     </center>
   </section>
-  <button style = "float: left">Update Knowledge</button>
+  <button style="float:left"><a href="update_contribution">Update Knowledge</a></button>
     <button style = "float: right">Submit</button>
     
 </body>
