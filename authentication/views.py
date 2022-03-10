@@ -29,14 +29,17 @@ from . tokens import generate_token
 from django.core.mail import EmailMessage, send_mail
 from django.utils.http import urlsafe_base64_decode
 from neo4j import GraphDatabase
+import cdata.freshdesk as mod
 import pandas
 import numpy
 from jira import JIRA
 from simple_salesforce import Salesforce
 import requests
 from authentication.models import Contribute
+import cdata.zohocrm as mod
 
 gfName=""
+uniqueId=""
 
 # Create your views here.
 def index(request):
@@ -149,6 +152,7 @@ def contribute(request):
           "kinsisghts":kinsisghts,
           "tags":tags,
           "owner":owner,
+          "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),
         #   "date_of_entry":datetime_entry.strftime('%Y/%m/%d %I:%M:%S:%p'),
         #   "date_of_login":datetime_login1.strftime('%Y/%m/%d %I:%M:%S:%p'),
         #   "date_of_logout":datetime_logout1
@@ -305,7 +309,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "BZ528TlT5VGzHJvsHlQUF721"))
+    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "2uVoIQagnXun0ynvRwjfB93E"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
@@ -333,32 +337,41 @@ def jiradisplay(request):
     context={'ml':ml,}
     return render(request,'knowledgepages/jiradisplay.html',context)
 
-def freshdesk(request):
-    api=request.POST.get('api')
-    domain=str(request.POST.get('domain'))
+# def freshdesk(request):
+#     api=request.POST.get('api')
+#     domain=str(request.POST.get('domain'))
     
-    a = API('knowledgeplatform.freshdesk.com', 'OZ1JWc0QQielVNhYIFQ3',)
-    # ticket = a.tickets.create_ticket('This is my third ticket',
-    #                              email='misrasmriti2807@gmail.com',
-    #                              description='This is the description of the ticket',
-    #                              tags=['example'])
+#     a = API('knowledgeplatform.freshdesk.com', 'OZ1JWc0QQielVNhYIFQ3',)
+#     # ticket = a.tickets.create_ticket('This is my third ticket',
+#     #                              email='misrasmriti2807@gmail.com',
+#     #                              description='This is the description of the ticket',
+#     #                              tags=['example'])
     
-    ticket = a.tickets.list_tickets(filter_name=None)
-    ticket1 = a.tickets.get_ticket(4)
-    print("Ticket is created at :",end="\t" )
-    print(ticket1.created_at)
-    print(ticket1.priority)
-    # print(ticket1.source)
-    print(ticket1.status)
-    # print(ticket1.stats)
+#     ticket = a.tickets.list_tickets(filter_name=None)
+#     ticket1 = a.tickets.get_ticket(4)
+#     print("Ticket is created at :",end="\t" )
+#     print(ticket1.created_at)
+#     print(ticket1.priority)
+#     # print(ticket1.source)
+#     print(ticket1.status)
+#     # print(ticket1.stats)
     
-    global freshdesk_Ticket
-    freshdesk_Ticket={'ticket':[]}
-    for i in ticket:
-        freshdesk_Ticket['ticket'].append(i) 
-        # print(i.keys)
+#     global freshdesk_Ticket
+#     freshdesk_Ticket={'ticket':[]}
+#     for i in ticket:
+#         freshdesk_Ticket['ticket'].append(i) 
+#         # print(i.keys)
 
-    # print(freshdesk_Ticket)
+#     # print(freshdesk_Ticket)
+#     return render(request,'knowledgepages/freshdesk.html')
+
+def freshdesk(request):
+    conn = mod.connect("Domain=knowledgeplatform;APIKey=OZ1JWc0QQielVNhYIFQ3;")
+    cmd = "SELECT Id, Subject, Description, Priority, Status FROM Tickets"
+    cur = conn.execute(cmd)
+    rs = cur.fetchall()
+    for row in rs:
+        print(row)
     return render(request,'knowledgepages/freshdesk.html')
 
 def freshdeskdisplay(request):
@@ -386,7 +399,10 @@ def salesforce(request):
     print(type(sf_data))
 
     return render(request, 'knowledgepages/salesforce.html')
-      
+
+def Zoho(request):
+    mod.connect("InitiateOAuth=GETANDREFRESH;") 
+    return render(request, "authentication/zoho.html")   
 
 def salesforcedisplay(request):
     mlt=zip(sfd['Id'],sfd['Name'],sfd['Type'])
@@ -425,5 +441,62 @@ def update_contribution(request):
     collection=db.knowledge
     if request.method=="POST":
         kid=request.POST['kid']
-        print(kid)
+        print(kid,"kid22")
+        global uniqueId
+        uniqueId=kid
     return render(request,'authentication/update_contribution.html')
+
+def update_contribution_display(request):
+    global uniqueId
+    print(uniqueId)
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    ourdata = collection.find({'ID':uniqueId})
+    return render(request,'authentication/update_contribution_display.html',{'ourdata':ourdata.clone()})
+
+def update_data(request):
+    global uniqueId
+    print("Inside update function",uniqueId)
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    udata=collection.find({'ID':uniqueId})
+    d={'udata':udata.clone()}
+    for x in d['udata']:
+        # print(x['ptype'])
+        # print(x['psummary'])
+        p1=x['ptype']
+        p2=x['psummary']
+        p3=x['pdescription']
+        p4=x['products']
+        p5=x['kanalysis']
+        p6=x['kinsisghts']
+        p7=x['tags']
+    if request.method=="POST":
+        ptype=request.POST['ptype']
+        if(ptype==""):
+            ptype=p1
+        psummary=request.POST['psummary']
+        if(psummary==""):
+            psummary=p2
+        pdescription=request.POST['pdescription']
+        if(pdescription==""):
+            pdescription=p3
+        products=request.POST.getlist('CD')
+        if(products==[]):
+            products=p4
+        kanalysis=request.POST['kanalysis']
+        if(kanalysis==""):
+            kanalysis=p5
+        kinsisghts=request.POST['kinsisghts']
+        if(kinsisghts==""):
+            kinsisghts=p6
+        tags=request.POST['tags']
+        if(tags==""):
+            tags=p7
+
+        db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'tags':tags,'owner':gfName})    
+        messages.success(request, "Data Updated Successfully")
+
+    return render(request, "authentication/index.html")

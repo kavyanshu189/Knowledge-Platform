@@ -8,6 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <title> {% block title %}Contribite Knowledge Updation{% endblock title %} | Knowledge Platform</title>
+    <style>
+      #bod
+      {
+        border:2px solid grey;
+        color:black;
+        background-color:white;
+        padding:4px;
+        text-decoration:none;  
+      }
+    </style>
   </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -83,10 +93,11 @@
       <center>
         <form action="update_contribution" method="post">
             {% csrf_token %}
-        <label for="kid">Enter Knowledge Id:</label>
+        <label for="kid">Enter Knowledge ID:</label>
         <input type="text" id="kid" name="kid"><br><br>
 
         <button type="submit">Update</button>
+        <a id="bod" href="update_contribution_display">Go on page</a>
         </form>
     </center>
     
