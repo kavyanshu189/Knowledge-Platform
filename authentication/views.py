@@ -475,7 +475,8 @@ def update_data(request):
         p7=x['tags']
     if request.method=="POST":
         ptype=request.POST['ptype']
-        if(ptype==""):
+        print(ptype,"ptype h ye")
+        if(ptype=="Problem Type"):
             ptype=p1
         psummary=request.POST['psummary']
         if(psummary==""):
