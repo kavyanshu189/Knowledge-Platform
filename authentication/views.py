@@ -29,12 +29,16 @@ from . tokens import generate_token
 from django.core.mail import EmailMessage, send_mail
 from django.utils.http import urlsafe_base64_decode
 from neo4j import GraphDatabase
+
 import requests
 from authentication.models import Contribute
 import cdata.zohocrm as mod1
 import cdata.freshdesk as mod2
 import cdata.salesforce as mod3
 import cdata.jira as mod4
+
+
+
 
 
 gfName=""
@@ -151,6 +155,8 @@ def contribute(request):
           "tags":tags,
           "owner":owner,
           "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),
+
+       
         }
         collection.insert_one(rec1)
 
@@ -317,6 +323,7 @@ def jira(request):
     for row in rs:
         print(row)
 
+
     global d
     d = {'Id':[], 'Name':[], 'Key':[]}
 
@@ -334,6 +341,7 @@ def jiradisplay(request):
     ml=zip(d['Id'],d['Name'],d['Key'])
     context={'ml':ml,}
     return render(request,'knowledgepages/jiradisplay.html',context)
+
 
 def salesforce(request):
     conn = mod3.connect("User='af@gcet.com';Password='admin123';Security Token='G7wSptekqNONY1L3hBSs9T27';")
@@ -353,6 +361,10 @@ def salesforce(request):
         d2['id'].append(t[2])
 
     return render(request, 'knowledgepages/salesforce.html')          
+
+
+ 
+
 
 def salesforcedisplay(request):
     mlt=zip(d2['name'],d2['billingState'],d2['id'])
@@ -403,6 +415,7 @@ def update_contribution(request):
         global uniqueId
         uniqueId=kid
     return render(request,'authentication/update_contribution.html')    
+
 
 def update_contribution_display(request):
     global uniqueId
@@ -458,4 +471,6 @@ def update_data(request):
         db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'tags':tags,'owner':gfName})    
         messages.success(request, "Data Updated Successfully")
 
+
     return render(request, "authentication/index.html")        
+

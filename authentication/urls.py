@@ -32,6 +32,9 @@ urlpatterns = [
    path('search', views.search, name="search"),
    path('your_contribution', views.your_Contribution, name="contri"),
    path('update_contribution', views.update_contribution, name="update_contribution"),
+   path('update_contribution_display', views.update_contribution_display, name="update_contribution_display"),
+   path('update_data', views.update_data, name="update_data"),
+   path('zoho', views.Zoho, name = "zoho"),
    
    path('update_contribution_display', views.update_contribution_display, name="update_contribution_display"),
    path('update_data', views.update_data, name="update_data"),
