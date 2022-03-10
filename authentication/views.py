@@ -317,7 +317,7 @@ def freshdeskdisplay(request):
 
 
 def jira(request):
-    conn = mod4.connect("User=akshaysrivastava0406@gmail.com;APIToken=qWaFubqKWlzLtCXUI61i50B8;Url=https://knowledgeplatform.atlassian.net")
+    conn = mod4.connect("User=mangalyogesh.22@gmail.com;APIToken=el2xmpup6oRO1ZNcJhWtE902;Url=https://knowledgeplatform.atlassian.net")
     cur = conn.execute("SELECT Id, Name, Key FROM Projects")
     rs = cur.fetchall()
     for row in rs:
