@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
 from datetime import datetime
-from freshdesk.api import API
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
@@ -10,6 +9,7 @@ from email import message
 from email.policy import HTTP
 from lib2to3.pgen2.tokenize import generate_tokens
 import re
+
 import datetime
 import pytz
 from django.conf import settings
@@ -29,18 +29,20 @@ from . tokens import generate_token
 from django.core.mail import EmailMessage, send_mail
 from django.utils.http import urlsafe_base64_decode
 from neo4j import GraphDatabase
-import cdata.freshdesk as mod
-import pandas
-import numpy
-from jira import JIRA
-from simple_salesforce import Salesforce
+
 import requests
 from authentication.models import Contribute
-import cdata.zohocrm as mod
+import cdata.zohocrm as mod1
+import cdata.freshdesk as mod2
+import cdata.salesforce as mod3
+import cdata.jira as mod4
+
+
+
+
 
 gfName=""
 uniqueId=""
-
 # Create your views here.
 def index(request):
     conn = MongoClient()
@@ -153,9 +155,8 @@ def contribute(request):
           "tags":tags,
           "owner":owner,
           "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),
-        #   "date_of_entry":datetime_entry.strftime('%Y/%m/%d %I:%M:%S:%p'),
-        #   "date_of_login":datetime_login1.strftime('%Y/%m/%d %I:%M:%S:%p'),
-        #   "date_of_logout":datetime_logout1
+
+       
         }
         collection.insert_one(rec1)
 
@@ -289,125 +290,88 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'activation_failed.html')
 
+def freshdesk(request):
+    conn = mod2.connect("Domain=knowledgeplatform;  APIKey=OZ1JWc0QQielVNhYIFQ3;")
+    cmd = "SELECT Id, Subject, Description FROM Tickets"
+    cur = conn.execute(cmd)
+    rs = cur.fetchall()
+    for row in rs:
+    	print(row)
+
+    global d1
+    d1 = {'Id':[], 'Subject':[]}
+
+    for t in rs:
+        print("Hello")
+        d1['Id'].append(t[0]);
+        d1['Subject'].append(t[1]);
+    print(d1)
+
+    return render(request,'knowledgepages/freshdesk.html')
+
+def freshdeskdisplay(request):
+    ml=zip(d1['Id'],d1['Subject'])
+    context={'ml':ml,}
+    return render(request,'knowledgepages/freshdeskdisplay.html',context)
+
+
 
 def jira(request):
-    jiraid=request.POST.get('jiraid')
-    # print(jiraid)
-    pname=str(request.POST.get('pname'))
-    #print(pname)
-    
-    #serv="https://"+pname+".atlassian.net/"
-    #print(serv)
+    conn = mod4.connect("User=akshaysrivastava0406@gmail.com;APIToken=qWaFubqKWlzLtCXUI61i50B8;Url=https://knowledgeplatform.atlassian.net")
+    cur = conn.execute("SELECT Id, Name, Key FROM Projects")
+    rs = cur.fetchall()
+    for row in rs:
+        print(row)
 
-    gm=str(request.POST.get('email'))
-    print(gm)
-    
-    tok=str(request.POST.get('token'))
-    print(tok)
-
-
-    jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
-    #jiraOptions = {'server': serv}
-
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "2uVoIQagnXun0ynvRwjfB93E"))
-    #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
-    
-    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
-        print('{}: {}:{}'.format(singleIssue.key, singleIssue.fields.summary,singleIssue.fields.reporter.displayName))
-    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
-        if(singleIssue.key==jiraid):
-            print("Field Summary is",singleIssue.fields.summary)
-            print("Reporter Name is",singleIssue.fields.reporter.displayName)
-            break
-    else:
-        print("Jira Id is Invalid")
 
     global d
-    d={'key':[],'summary':[],'name':[]}
-    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
-        d['key'].append(singleIssue.key)
-        d['summary'].append(singleIssue.fields.summary)
-        d['name'].append(singleIssue.fields.reporter.displayName)    
-    print(d,type(d))
+    d = {'Id':[], 'Name':[], 'Key':[]}
+
+    for t in rs:
+        # print("Hello")
+        d['Id'].append(t[0]);
+        d['Name'].append(t[1]);
+        d['Key'].append(t[2])
+    print(d)
+
     return render(request,'knowledgepages/jira.html')
 
 
 def jiradisplay(request):
-    ml=zip(d['key'],d['summary'],d['name'])
+    ml=zip(d['Id'],d['Name'],d['Key'])
     context={'ml':ml,}
     return render(request,'knowledgepages/jiradisplay.html',context)
 
-# def freshdesk(request):
-#     api=request.POST.get('api')
-#     domain=str(request.POST.get('domain'))
-    
-#     a = API('knowledgeplatform.freshdesk.com', 'OZ1JWc0QQielVNhYIFQ3',)
-#     # ticket = a.tickets.create_ticket('This is my third ticket',
-#     #                              email='misrasmriti2807@gmail.com',
-#     #                              description='This is the description of the ticket',
-#     #                              tags=['example'])
-    
-#     ticket = a.tickets.list_tickets(filter_name=None)
-#     ticket1 = a.tickets.get_ticket(4)
-#     print("Ticket is created at :",end="\t" )
-#     print(ticket1.created_at)
-#     print(ticket1.priority)
-#     # print(ticket1.source)
-#     print(ticket1.status)
-#     # print(ticket1.stats)
-    
-#     global freshdesk_Ticket
-#     freshdesk_Ticket={'ticket':[]}
-#     for i in ticket:
-#         freshdesk_Ticket['ticket'].append(i) 
-#         # print(i.keys)
 
-#     # print(freshdesk_Ticket)
-#     return render(request,'knowledgepages/freshdesk.html')
-
-def freshdesk(request):
-    conn = mod.connect("Domain=knowledgeplatform;APIKey=OZ1JWc0QQielVNhYIFQ3;")
-    cmd = "SELECT Id, Subject, Description, Priority, Status FROM Tickets"
-    cur = conn.execute(cmd)
+def salesforce(request):
+    conn = mod3.connect("User='af@gcet.com';Password='admin123';Security Token='G7wSptekqNONY1L3hBSs9T27';")
+    cur = conn.execute("SELECT Name,BillingState, Id FROM Account")
     rs = cur.fetchall()
+    print(rs)
     for row in rs:
         print(row)
-    return render(request,'knowledgepages/freshdesk.html')
-
-def freshdeskdisplay(request):
-    return render(request, 'knowledgepages/freshdeskdisplay.html',freshdesk_Ticket)
-
-    # Salesforce
-def salesforce(request):
-    sf = Salesforce(
-    username='af@gcet.com', 
-    password='admin123', 
-    security_token='G7wSptekqNONY1L3hBSs9T27')
     
-    sf_data = sf.query_all("SELECT Id, Name, Type FROM Opportunity LIMIT 20")
-    global sfd
-    
-    sfd={'Id':[],'Name':[], 'Type':[]}
-    sfdr=sf_data['records']
-    for sfdata in sfdr:
-        print(f"{sfdata['Id']} -- {sfdata['Name']} -- {sfdata['Type']}")
-        sfd['Id'].append(sfdata['Id'])
-        sfd['Name'].append(sfdata['Name'])
-        sfd['Type'].append(sfdata['Type'])
-        
-    
-    print(type(sf_data))
+    global d2
+    d2 = {'name':[], 'billingState':[], 'id' : []}
 
-    return render(request, 'knowledgepages/salesforce.html')
+    for t in rs:
+        print("Hello")
+        d2['name'].append(t[0]);
+        d2['billingState'].append(t[1]);
+        d2['id'].append(t[2])
 
-def Zoho(request):
-    mod.connect("InitiateOAuth=GETANDREFRESH;") 
-    return render(request, "authentication/zoho.html")   
+    return render(request, 'knowledgepages/salesforce.html')          
+
+
+ 
+
 
 def salesforcedisplay(request):
-    mlt=zip(sfd['Id'],sfd['Name'],sfd['Type'])
+    mlt=zip(d2['name'],d2['billingState'],d2['id'])
     context={'mlt':mlt,}
     return render(request, 'knowledgepages/salesforcedisplay.html',context)
+
+
 
 def search(request):
     conn = MongoClient()
@@ -435,6 +399,12 @@ def your_Contribution(request):
     # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
     return render(request,'authentication/your_contribution.html',{'defectdata': defectdata.clone()})
 
+
+def Zoho(request):
+    mod1.connect("InitiateOAuth=GETANDREFRESH;") 
+    return render(request, "authentication/zoho.html")   
+
+
 def update_contribution(request):
     conn=MongoClient()
     db=conn.Lucid
@@ -444,7 +414,8 @@ def update_contribution(request):
         print(kid,"kid22")
         global uniqueId
         uniqueId=kid
-    return render(request,'authentication/update_contribution.html')
+    return render(request,'authentication/update_contribution.html')    
+
 
 def update_contribution_display(request):
     global uniqueId
@@ -500,4 +471,6 @@ def update_data(request):
         db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'tags':tags,'owner':gfName})    
         messages.success(request, "Data Updated Successfully")
 
-    return render(request, "authentication/index.html")
+
+    return render(request, "authentication/index.html")        
+
