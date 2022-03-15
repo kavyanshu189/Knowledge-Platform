@@ -11,7 +11,7 @@
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <title> {% block title %}Contribute{% endblock title %} | Knowledge Platform </title>
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script>
+    {% comment %} <script>
 
       $(document).ready(function () {
   
@@ -44,7 +44,7 @@
             $('#btnSort').trigger('click');
         });
       });
-  </script>
+  </script> {% endcomment %}
   
   
 </head>
