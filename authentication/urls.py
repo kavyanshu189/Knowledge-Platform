@@ -34,6 +34,11 @@ urlpatterns = [
    path('update_contribution', views.update_contribution, name="update_contribution"),
    path('update_contribution_display', views.update_contribution_display, name="update_contribution_display"),
    path('update_data', views.update_data, name="update_data"),
+   path('delete_data', views.delete_data, name="delete_data"),
    path('zoho', views.Zoho, name = "zoho"),
+   path('delete_account', views.delete_account, name = "delete_account"),
+   path('generate_tags',views.generate_tags,name ="generate_tags"),
+   path('filltags',views.generate_tags, name="filltags"),
+   path('contribute_neo4j',views.contribute_neo4j, name="contribute_neo4j"),
 
 ]

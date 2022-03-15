@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,35 +9,61 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <title> {% block title %}Contribute{% endblock title %} | Knowledge Platform </title>
-    <style>
-      table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-        height: 100%;
-      }
-      
-      td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-      }
-      
-      tr:nth-child(even) {
-        heigth  : 100%;
-        width: 100%;
-        background-color: #dddddd;
-      }
-  </style>
-  </head>  
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    
+    <script>
+
+      $(document).ready(function () {
+  
+          $('#ptype').change(function () {
+              var szTr;
+              var iRowCount = 0;
+  
+              var szSelectedText = $(this).find('option:selected').text();
+  
+  
+              if ($("#table tbody tr:has(td:eq(1):contains('" + szSelectedText + "'))").length > 0) {
+                  alert("Duplicate!!!!")
+                  return;
+              }
+              else {
+                  iRowCount = $('#table tbody tr').length + 1;
+                  szTr = "<tr>"
+                  szTr = szTr + "<td>" + iRowCount + "</td>";
+                  szTr = szTr + "<td>" + $(this).find('option:selected').text() + "</td>"
+                  szTr = szTr + "<td><input type='text' class='date_from' placeholder='Enter your ticket id.'></td>"
+                  szTr = szTr + "<td class='delete'>Delete</td>"
+                  szTr = szTr + "</tr>"
+                  $('#table tbody').append(szTr)
+              }
+  
+          });
+  
+          $('#table').on('click','.delete',function () {
+            $(this).closest('tr').remove();
+            $('#btnSort').trigger('click');
+        });
+      });
+  </script>
+  
+  
+</head>
+
     <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+{% comment %} NAVIGATION STARTS HERE {% endcomment %}
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -64,14 +91,17 @@
           <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Issue Tracking
           </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="jira">Jira</a>
-          <a class="dropdown-item" href="salesforce">Salesforce</a>
-          <a class="dropdown-item" href="freshdesk">FreshDesk</a>
-        </div>
-      </li>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="jira">Jira</a>
+            <a class="dropdown-item" href="salesforce">Salesforce</a>
+            <a class="dropdown-item" href="freshdesk">FreshDesk</a>
+          </div>
+        </li>
       </div>
-      
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+      </form>
       <div class="btn-group">
         <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
@@ -80,50 +110,49 @@
         </button>
         {% if user.is_authenticated %}
         <ul class="dropdown-menu">
-          {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
-          {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
           <li><a class="dropdown-item" href="/signout">Sign out</a></li>
         </ul>
         {% else %}
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
           <li><a class="dropdown-item" href="/signin">Sign in</a></li>
-          {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
         </ul>
         {% endif %}
       </div>
     </nav>
+
+{% comment %} Navigation ends here {% endcomment %}
+
+
     <section style="background-color:#00a0ff; height:25; " >
       <br>
       <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1><br>
       <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
     </section>
- <section style="background-color:#FFFACD";>
-    <center  >
-      <table>
-        <tr>
-          <th>Id</th>
-          <th>Problem Type</th>
-          <th>Problem Summary</th>
-          <th>Problem Description</th>
-          <th>Knowledge Analysis</th>
-          <th>Knowledge Insights</th>
-        </tr>
-        {% for x in defectdata %}
-    
-        <tr>
-          <td>{{x.ID}}</td>
-          <td>{{x.ptype}}</td>
-          <td>{{x.psummary}}</td>
-          <td>{{x.pdescription}}</td>
-          <td>{{x.kanalysis}}</td>
-          <td>{{x.kinsisghts}}</td>
-        </tr>
-        {%endfor%}
+
+<div class="container mb-3 py-4">
+    <h1 class="text-center" style = "color : #00a0ff";>Create and Fill tags</h1><br>
+    <center>
+    <h3>Now you can generate Tags here </h3>
     </center>
-  </section>
-  <button style="float:left"><a href="update_contribution">Update and Delete Knowledge</a></button>
     
-    
+    <center>
+    <form action = "generate_tags" method="get">
+      {% csrf_token %}
+      <input type="submit"  value="Generate Tags" name="gentags">
+    </form> 
+  </center>
+
+  
+<br><br>
+  <center>
+    <h3>Send this Data to neo4j for creating relationships</h3>
+    <form action = "contribute_neo4j" method="get">
+      {% csrf_token %}
+      <input type="submit"  value="Send data to neo4j" name="contributeneo">
+    </form> 
+  </center>
+
+</div>
 </body>
 </html>

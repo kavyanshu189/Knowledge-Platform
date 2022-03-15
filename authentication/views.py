@@ -1,3 +1,4 @@
+from typing import final
 from django.shortcuts import render, HttpResponse, redirect
 from datetime import datetime
 from django.contrib import messages
@@ -39,10 +40,22 @@ import cdata.jira as mod4
 
 
 
-
-
 gfName=""
 uniqueId=""
+uName=""
+ppsummary=""
+ppdescription=""
+pproducts=[]
+pkanalysis=""
+pkinsisghts=""
+powner=""
+pptype=""
+
+
+taggs=dict()
+finaltags=[]
+uniqueId2=""
+
 # Create your views here.
 def index(request):
     conn = MongoClient()
@@ -63,7 +76,6 @@ def signup(request):
         lname = request.POST['lname']
         email = request.POST['email']
         pass1 = request.POST['pass1']
-        
         
         if User.objects.filter(username=username):
             messages.error(request, "Username already exist! Please try some other username")
@@ -123,19 +135,44 @@ def signup(request):
     
     return render(request, "authentication/signup.html")
 
+
+def delete_account(request):
+    global uName
+    print(uName)
+    user = User.objects.get(username = uName)
+    user.delete()
+    messages.success(request, "Account Deleted Successfully")
+    subject = "Account Deleted Successfully!!"
+    message = "Hello " + user.first_name + "! \n" + "Your Account has been successfully deleted from our Platform.  \nThank You for using our Platform. We hope you definitely got a great experience of using our platform. \nHope to See you soon. \n\n Regards\n Team Knowledge Platform"
+    from_email = settings.EMAIL_HOST_USER
+    to_list = [user.email]
+    send_mail(subject, message, from_email, to_list, fail_silently=True)
+    return redirect('home')
+
 def contribute(request):
     if request.method == "POST":
         ptype=request.POST['ptype']
         psummary=request.POST['psummary']
         pdescription=request.POST['pdescription']
+        global ppsummary 
+        global ppdescription
+        ppsummary = psummary
+        ppdescription = pdescription
         products=request.POST.getlist('CD')
         kanalysis=request.POST['kanalysis']
         kinsisghts=request.POST['kinsisghts']
-        tags=request.POST['tags']
+        #tags=request.POST['tags']
         owner=request.POST['owner']     
+        global pproducts, pkanalysis,pkinsisghts,powner,pptype, finaltags
+        pproducts=products
+        pkanalysis=kanalysis
+        pkinsisghts=kinsisghts
+        powner=owner
+        pptype=ptype
         datetime_entry = datetime.datetime.now() 
         # username = request.session.get('username') 
-        contr=Contribute(ptype=ptype,psummary=psummary,pdescription=pdescription,products=products,kanalysis=kanalysis,kinsisghts=kinsisghts,tags=tags,owner=owner)
+        #contr=Contribute(ptype=ptype,psummary=psummary,pdescription=pdescription,products=products,kanalysis=kanalysis,kinsisghts=kinsisghts,tags=tags,owner=owner)
+        contr=Contribute(ptype=ptype,psummary=psummary,pdescription=pdescription,products=products,kanalysis=kanalysis,kinsisghts=kinsisghts,owner=owner)
         contr.save()
         conn = MongoClient()
         db=conn.Lucid
@@ -152,42 +189,61 @@ def contribute(request):
           "products":products,
           "kanalysis":kanalysis,
           "kinsisghts":kinsisghts,
-          "tags":tags,
+          "tags":finaltags,
           "owner":owner,
-          "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),
+          "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),          
 
        
         }
+        global uniqueId2
+        uniqueId2=owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis))
         collection.insert_one(rec1)
+        tags_string=""
+        for i in finaltags:
+            tags_string+=i+","   
+        print(finaltags,"finaaaaaaaaal",tags_string)     
 
-        #added neo4j database
-        neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,ptype,psummary,pdescription,kanalysis,kinsisghts)
-        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-        session=graphdb.session()
-        q2='''Merge (a:Owner {owner:'%s'})
-        Merge (b:Problem_Type{ptype:'%s'}) 
-        Merge(c:Problem_Summary{psummary:'%s'})
-        Merge (d:Problem_Description{pdescription:'%s'})
-        Merge (e:Knowledge_Analysis{kanalysis:'%s'})
-        Merge(f:Knowledge_Insights{kinsisghts:'%s'})
-        Merge (g:Tag{tag:'%s'})
-        Merge (h:Product{product:'%s'})
-        MERGE (b)-[:OWNER]->(a)
-        MERGE (b)-[:PROBLEM_SUMMARY]->(c)
-        MERGE (b)-[:PROBLEM_DESCRIPTION]->(d)
-        MERGE (b)-[:KNOWLEDGE_ANALYSIS]->(e)
-        MERGE (b)-[:KNOWLEDGE_INSIGHTS]->(f)
-        MERGE (b)-[:TAG]->(g)
-        MERGE (b)-[:PRODUCT]->(h)'''%(owner,ptype,psummary,pdescription,kanalysis,kinsisghts,tags,*products)
-        q1=" match(n) return n "
+        # #added neo4j database
+        # neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,ptype,psummary,pdescription,kanalysis,kinsisghts)
+        # graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        # session=graphdb.session()
+        # q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
+        # WITH kp
+        # UNWIND split('%s',',') AS tag
+        # MERGE (t:tags_string {tagname: tag})
+        # MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
+        # q1=" match(n) return n "
     
-        session.run(q2)
-        session.run(q1)
+        # session.run(q2)
+        # session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
-        return redirect('signout')
+        return redirect('filltags')
     return render(request, 'authentication/contribute.html')
 
+def contribute_neo4j(request):
+    global ppdescription,ppsummary,pproducts, pkanalysis,pkinsisghts,powner,pptype, uniqueId2,finaltags
+    final_Tags=""
+    for i in finaltags:
+        final_Tags+=i+","
+    
+
+    if request.GET.get("contributeneo"):
+        #added neo4j database
+        neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",powner,pptype,ppsummary,ppdescription,pkanalysis,pkinsisghts)
+        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        session=graphdb.session()
+        q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
+        WITH kp
+        UNWIND split('%s',',') AS tag
+        MERGE (t:final_Tags {tagname: tag})
+        MERGE (kp)-[:belongs_to]->(t)'''%(ppdescription,pptype,ppsummary,uniqueId2,pkanalysis,pkinsisghts,powner,*pproducts,final_Tags[:-1])
+        q1=" match(n) return n "
+
+        session.run(q2)
+        session.run(q1)
+        return redirect("home")
+    return redirect(request,'authentication/filltags.html')
 
 def defects(request):
     conn = MongoClient()
@@ -234,6 +290,8 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
+        global uName
+        uName=username
         
     #below we are doing user authentication  
       
@@ -411,7 +469,6 @@ def update_contribution(request):
     collection=db.knowledge
     if request.method=="POST":
         kid=request.POST['kid']
-        print(kid,"kid22")
         global uniqueId
         uniqueId=kid
     return render(request,'authentication/update_contribution.html')    
@@ -471,6 +528,66 @@ def update_data(request):
         db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'tags':tags,'owner':gfName})    
         messages.success(request, "Data Updated Successfully")
 
+    return render(request, "authentication/index.html")       
 
-    return render(request, "authentication/index.html")        
+
+def delete_data(request):
+     global uniqueId
+     conn = MongoClient()
+     db=conn.Lucid
+     collection=db.knowledge
+     db.knowledge.remove({'ID':uniqueId})
+     messages.success(request, "Data Deleted Successfully")
+     return render(request, "authentication/index.html")       
+
+
+def generate_tags(request):
+    if request.GET.get("gentags"):
+        s =  ppdescription + ppsummary
+        print(s)
+        s = s.lower()
+        
+        keywords=["data", "connect", "bi", "analytics", "arcESB", "IPaas", "cdata", "drivers", "neo4j", "django", "server", "data", " error", "jira" ,"salesforce","test"]
+        
+        for k in range(0,len(keywords)):
+            keywords[k] = keywords[k].lower()
+
+        print("Knowledge Given:")
+        arr = s.split(" ")
+
+        dic = {}
+        for w in arr:
+            dic[w] = arr.count(w)
+        
+        print(dic)
+
+        st = set(arr)
+        print("Suggested Tags for the given content are as follows:")
+        tags = {"tag" : []}
+        for w in st:
+            w=w.lower()
+            if ',' in w:
+                w=w[:-1]
+            if w in keywords:
+                w = w.upper()
+                print(w)
+                tags["tag"].append(w)
+        print(tags)     
+        global taggs
+        taggs = tags
+        print("global",taggs)   
+        global finaltags
+        finaltags=taggs["tag"]
+        global uniqueId2
+        conn=MongoClient()
+        db=conn.Lucid
+        collection=db.knowledge
+        print(uniqueId2,finaltags, "uid h ye")
+        db.knowledge.update({'ID':uniqueId2},{"$set": {'tags':finaltags}})
+        #return redirect("home")
+
+    return render(request,"authentication/filltags.html", taggs)
+
+
+
 

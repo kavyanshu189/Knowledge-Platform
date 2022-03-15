@@ -151,6 +151,7 @@ tr:nth-child(even) {
       {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
       <li><a class="dropdown-item" href="/your_contribution" name="contri"> Your Contributions</a></li>
       <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+      <li><a class="dropdown-item" id="confirm-delete" href="/delete_account">Delete Account</a></li>
     </ul>
     {% else %}
     <ul class="dropdown-menu">
@@ -350,6 +351,11 @@ tr:nth-child(even) {
       
         </table>
         </center>
+        <script>
+          $(document).on('click', '#confirm-delete', function(){
+            return confirm('Are you sure you want to delete your Account?');
+        })
+        </script>
       
 </body>
 </html>
