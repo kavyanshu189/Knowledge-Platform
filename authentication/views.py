@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from typing import final
 from django.shortcuts import render, HttpResponse, redirect
 from datetime import datetime
@@ -5,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from matplotlib import gridspec
+from numpy import searchsorted
 from pymongo import MongoClient
 from email import message
 from email.policy import HTTP
@@ -204,18 +206,26 @@ def contribute(request):
         print(finaltags,"finaaaaaaaaal",tags_string)     
 
         # #added neo4j database
-        # neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,ptype,psummary,pdescription,kanalysis,kinsisghts)
-        # graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-        # session=graphdb.session()
-        # q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
-        # WITH kp
-        # UNWIND split('%s',',') AS tag
-        # MERGE (t:tags_string {tagname: tag})
-        # MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
-        # q1=" match(n) return n "
+       
+        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        session=graphdb.session()
+        q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
+        WITH kp
+        UNWIND split('%s',',') AS tag
+        MERGE (t:tags_string {tagname: tag})
+        MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
+        q5="drop index kpindex"
+        q6="drop index rindex"
+        q3="CREATE FULLTEXT INDEX kpindex FOR (n: knowledge|tags) ON EACH [n.ptype, n.pdescription,n.owner,n.kanalysis, n.kinsisghts,n.products,n.tags]"
+        q4="CREATE FULLTEXT INDEX rindex FOR ()-[r:belongs_to]-() ON EACH [r.tagname]"
+        q1=" match(n) return n "
     
-        # session.run(q2)
-        # session.run(q1)
+        session.run(q2)
+        session.run(q5) 
+        session.run(q6)
+        session.run(q3)
+        session.run(q4)
+        session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
         return redirect('filltags')
@@ -251,17 +261,19 @@ def defects(request):
     collection=db.knowledge
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
-
-def defect(request):
-    # conn = MongoClient()
-    # db=conn.Lucid
-    # collection=db.knowledge
-    # defectdata =collection.find({'ptype':'defect'})
-    graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-    session=graphdb.session()
-    q3="Match (t:Problem_Type)-[r:PROBLEM_DESCRIPTION]-> (c:Problem_Description) return t.ptype AS p_type,c.pdescription AS p_description"
-    nodes=session.run(q3)
-    return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
+global searched
+# def defect(request):
+#     conn = MongoClient()
+#     db=conn.Lucid
+#     collection=db.knowledge
+#     if request.method=="POST":
+#         searched=request.POST['searched']
+#     graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+#     session=graphdb.session()
+#     q3='''CALL db.index.fulltext.queryNodes("kpindex", %s) YIELD node, score RETURN node.ptype,node.id,node.owner node.pdescription, score''' %(searched)
+#     nodes=session.run(q3)
+   
+#     return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
 
 def enhancements(request):
     conn = MongoClient()
@@ -432,17 +444,18 @@ def salesforcedisplay(request):
 
 
 def search(request):
-    conn = MongoClient()
-    db=conn.Lucid
-    collection=db.knowledge
+    # conn = MongoClient()
+    # db=conn.Lucid
+    # collection=db.knowledge
     if request.method=="POST":
         searched=request.POST['searched']
-        #login=Contribute.objects.filter(ptype__contains=searched) 
-        defectdata =collection.find({'ptype':searched})
-        # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
-        return render(request,'authentication/search.html',{'searched':searched,'defectdata': defectdata.clone()})
-    else:
-        return render(request,'authentication/search.html') 
+    graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+    session=graphdb.session()
+    q3='''CALL db.index.fulltext.queryNodes("kpindex", "%s") YIELD node RETURN node''' %(searched)
+    nodes=session.run(q3) 
+    # print(*nodes)
+    # we are showing results on page name defect
+    return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
 
 def your_Contribution(request):
     conn = MongoClient()

@@ -35,20 +35,19 @@
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Knowledges
             </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="defects">Defects</a>
-            {% comment %} Neo4j  {% endcomment %}
-            <a class="dropdown-item" href="defect">Defect(Neo4j)</a>
-            <a class="dropdown-item" href="enhancements">Enhancement</a>
-            <a class="dropdown-item" href="opportunity">Opportunity</a>
-            <a class="dropdown-item" href="supportticket">Support Ticket</a>
-          </div>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="defects" >Defects <span class="sr-only">(current)</span></a>
+              <a class="dropdown-item" href="enhancements">Enhancement</a>
+              <a class="dropdown-item" href="opportunity">Opportunity</a>
+              <a class="dropdown-item" href="supportticket">Support Ticket</a>
+            </div>
         </li>
       </div>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
-        </form>
+      <form class="form-inline my-2 my-lg-0" method=POST action={% url 'search'%} >
+        {%csrf_token%}
+        <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledges" aria-label="Search" name="searched">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+      </form>
       
       <div class="btn-group">
         <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
