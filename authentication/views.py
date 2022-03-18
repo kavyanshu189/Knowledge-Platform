@@ -214,17 +214,21 @@ def contribute(request):
         UNWIND split('%s',',') AS tag
         MERGE (t:tags_string {tagname: tag})
         MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
-        q5="drop index kpindex"
-        q6="drop index rindex"
-        q3="CREATE FULLTEXT INDEX kpindex FOR (n: knowledge|tags) ON EACH [n.ptype, n.pdescription,n.owner,n.kanalysis, n.kinsisghts,n.products,n.tags]"
-        q4="CREATE FULLTEXT INDEX rindex FOR ()-[r:belongs_to]-() ON EACH [r.tagname]"
+        # q5="drop index kpindex"
+        # q6="drop index rindex"
+        # q3="CREATE FULLTEXT INDEX kpindex FOR (n: knowledge|tags) ON EACH [n.ptype, n.pdescription,n.owner,n.kanalysis, n.kinsisghts,n.products,n.tags]"
+        # q4="CREATE FULLTEXT INDEX rindex FOR ()-[r:belongs_to]-() ON EACH [r.tagname]"
         q1=" match(n) return n "
     
         session.run(q2)
-        session.run(q5) 
-        session.run(q6)
-        session.run(q3)
-        session.run(q4)
+
+        # we are commented out because we are creating index in neo4j if doing and redoing again here will 
+        # increase computing and also might throw error like this index already exists  
+
+        # session.run(q5) 
+        # session.run(q6)
+        # session.run(q3)
+        # session.run(q4)
         session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
