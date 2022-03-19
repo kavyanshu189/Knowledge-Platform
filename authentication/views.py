@@ -39,6 +39,7 @@ import cdata.zohocrm as mod1
 import cdata.freshdesk as mod2
 import cdata.salesforce as mod3
 import cdata.jira as mod4
+from json import dumps
 
 
 
@@ -59,12 +60,49 @@ finaltags=[]
 uniqueId2=""
 
 # Create your views here.
+
 def index(request):
     conn = MongoClient()
     db=conn.Lucid
     collection=db.knowledge
     coll =collection.find()
-    return render(request, "authentication/index.html", {'defectdata': coll.clone()})
+    a = {'defectdata': coll.clone()}
+    new_data_dic = {}
+    key = 1
+    i = 0
+    # list_of_attributes = ["ptype", "psummary", "pdescription","products","kanalysis","kinsisghts","tags","owner","ID"]
+    for doc in coll:
+        keys = str(key)
+        lst = []
+        new_data_dic[keys] = lst
+        for k,v in doc.items():
+            if k!='_id':
+                if type(v) == list :
+                    flag = 1
+                    for p in v:
+                        if flag==1:
+                            v =  "\n"+k.upper() + " -> "  + p
+                        else:
+                            v += "\n" + p 
+                else:
+                    v = v.replace(","," ")
+                    v = "\n"+k.upper() + " -> " + v 
+                new_data_dic[keys].append(v)
+        key+=1    
+    print("this one")
+    print(new_data_dic)     
+
+
+    # all_data_dic = {'_id':[],'date_of_entry':[],'date_of_login':[],'ptype':[],'support Ticket':[],'psummary':[],'pdescription':[],'products':[],'kanalysis':[],'kinsisghts':[],'tags':[],'owner':[],'ID':[]}
+    # for collection in coll:
+    #     for k,v in collection.items():
+    #         if k in all_data_dic  and k!='_id':
+    #             all_data_dic[k].append(v)
+
+    dataJSON = dumps(new_data_dic)
+
+
+    return render(request, "authentication/index.html", {'data': dataJSON})
 
 def about(request):
     return render(request, 'authentication/about.html') 
@@ -265,6 +303,7 @@ def defects(request):
     collection=db.knowledge
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
+
 global searched
 # def defect(request):
 #     conn = MongoClient()

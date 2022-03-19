@@ -71,12 +71,14 @@
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Knowledges
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="defects" >Defects <span class="sr-only">(current)</span></a>
-              <a class="dropdown-item" href="enhancements">Enhancement</a>
-              <a class="dropdown-item" href="opportunity">Opportunity</a>
-              <a class="dropdown-item" href="supportticket">Support Ticket</a>
-            </div>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="defects">Defects</a>
+            {% comment %} Neo4j  {% endcomment %}
+            <a class="dropdown-item" href="defect">Defect(Neo4j)</a>
+            <a class="dropdown-item" href="enhancements">Enhancement</a>
+            <a class="dropdown-item" href="opportunity">Opportunity</a>
+            <a class="dropdown-item" href="supportticket">Support Ticket</a>
+          </div>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,9 +91,8 @@
           </div>
         </li>
       </div>
-      <form class="form-inline my-2 my-lg-0" method=POST action={% url 'search'%} >
-        {%csrf_token%}
-        <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledges" aria-label="Search" name="searched">
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
       </form>
       <div class="btn-group">
@@ -139,7 +140,7 @@
   </div> {% endcomment %}
     <div class="form-group" >
       <label for="ptype">Problem Type</label> <br>
-    <select id="ptype" name="ptype">
+    <select id="ptype" name="ptype" required>
       <option value="Problem Type">Choose your problem type</option>
       <option value="defect">Defect</option>
       <option value="enhancement">Enhancement</option>
@@ -152,16 +153,16 @@
 
         <div class="form-group">
             <label for="psummary">Problem Summary</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="psummary" name="psummary" cols="80" rows="10" placeholder="Enter your Problem Summary"></textarea>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="psummary" name="psummary" required cols="80" rows="10" placeholder="Enter your Problem Summary"></textarea>
         </div>
         
         <div class="form-group">
             <label for="pdescription">Problem Description</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="pdescription" name="pdescription" cols="80" rows="10" placeholder="Enter your Problem description"></textarea>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="pdescription" name="pdescription" required cols="80" rows="10" placeholder="Enter your Problem description"></textarea>
         </div>      
         
         <div class="form-group">
-          <label for="CD">Products Mapped: </label><br>
+          <label for="CD" required>Products Mapped: </label><br>
           <input type="checkbox" name="CD" value="CData Drivers">CData Drivers
           <input type="checkbox" name="CD" value="CData ArcESB">CData ArcESB
           <input type="checkbox" name="CD" value="CData Connect">CData Connect
@@ -173,20 +174,20 @@
 
         <div class="form-group">
             <label for="kanalysis">Knowledge Analysis</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kanalysis" name="kanalysis" cols="80" rows="5" placeholder="Enter your Knowledge Analysis"></textarea>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kanalysis" required name="kanalysis" cols="80" rows="5" placeholder="Enter your Knowledge Analysis"></textarea>
 
         </div>      
         
         <div class="form-group">
             <label for="kinsisghts">Knowledge Insights</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kinsisghts" name="kinsisghts" cols="80" rows="5" placeholder="Enter your Knowledge Insights"></textarea>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" required id="kinsisghts" name="kinsisghts" cols="80" rows="5" placeholder="Enter your Knowledge Insights"></textarea>
 
         </div>   
         
 
         <div class="form-group">
             <label for="owner">Owner</label> <br>
-            <input type="text" id="owner" name="owner">
+            <input type="text" id="owner" name="owner" required>
         </div>   
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
@@ -202,4 +203,4 @@
    
 </div>
 </body>
-</html> 
+</html>
