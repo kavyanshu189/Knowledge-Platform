@@ -10,6 +10,141 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <title> {% block title %}Sign In{% endblock title %} | Knowledge Platform</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        {% comment %} font-family: 'Poppins', sans-serif; {% endcomment %}
+        font-family:Arial;
+      }
+      .sgnin{
+        display: grid;
+        height: 100%;
+        width: 100%;
+        place-items: center;
+        background-color:rgb(37, 150, 190)
+        /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
+      }
+      ::selection{
+        background: #4158d0;
+        color: #fff;
+      }
+      .wrapper{
+        width:500px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+      }
+      .wrapper .title{
+        font-size: 35px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 100px;
+        font-family:Arial;
+        color: #fff;
+        user-select: none;
+        border-radius: 15px 15px 0 0;
+        background: linear-gradient(-135deg, #00aaff, #09c6f9);
+      }
+      .wrapper form{
+        padding: 10px 30px 50px 30px;
+      }
+      .wrapper form .field{
+        height: 50px;
+        width: 100%;
+        margin-top: 20px;
+        position: relative;
+      }
+      .wrapper form .field input{
+        height: 100%;
+        width: 100%;
+        outline: none;
+        font-size: 17px;
+        padding-left: 20px;
+        border: 1px solid lightgrey;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+      }
+      .wrapper form .field input:focus,
+      form .field input:valid{
+        border-color: #4158d0;
+      }
+      .wrapper form .field label{
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        color: #999999;
+        font-weight: 400;
+        font-size: 17px;
+        pointer-events: none;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+      }
+      form .field input:focus ~ label,
+      form .field input:valid ~ label{
+        top: 0%;
+        font-size: 16px;
+        color: #4158d0;
+        background: #fff;
+        transform: translateY(-50%);
+      }
+      form .content{
+        display: flex;
+        width: 100%;
+        height: 110px;
+        font-size: 16px;
+        align-items: center;
+        justify-content: space-around;
+      }
+      form .content .checkbox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      form .content input{
+        width: 15px;
+        height: 15px;
+        background: red;
+      }
+      form .content label{
+        color: #262626;
+        user-select: none;
+        padding-left: 5px;
+      }
+      form .content .pass-link{
+        color: "";
+      }
+      form .field input[type="submit"]{
+        color: #fff;
+        border: none;
+        padding-left: 0;
+        margin-top: -10px;
+        font-size: 20px;
+        font-weight: 500;
+        cursor: pointer;
+        background: linear-gradient(-135deg, #00aaff, #09c6f9);
+        transition: all 0.3s ease;
+      }
+      form .field input[type="submit"]:active{
+        transform: scale(0.95);
+      }
+      form .signup-link{
+        color: #262626;
+        margin-top: 20px;
+        text-align: center;
+      }
+      form .pass-link a,
+      form .signup-link a{
+        color: #4158d0;
+        text-decoration: none;
+      }
+      form .pass-link a:hover,
+      form .signup-link a:hover{
+        text-decoration: underline;
+      }
+    </style>
   </head>
     <body><nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
@@ -30,12 +165,14 @@
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Knowledges
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="defects" >Defects <span class="sr-only">(current)</span></a>
-              <a class="dropdown-item" href="enhancements">Enhancement</a>
-              <a class="dropdown-item" href="opportunity">Opportunity</a>
-              <a class="dropdown-item" href="supportticket">Support Ticket</a>
-            </div>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="defects">Defects</a>
+            {% comment %} Neo4j  {% endcomment %}
+            <a class="dropdown-item" href="defect">Defect(Neo4j)</a>
+            <a class="dropdown-item" href="enhancements">Enhancement</a>
+            <a class="dropdown-item" href="opportunity">Opportunity</a>
+            <a class="dropdown-item" href="supportticket">Support Ticket</a>
+          </div>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,11 +185,10 @@
         </div>
       </li>
     </div>
-    <form class="form-inline my-2 my-lg-0" method=POST action={% url 'search'%} >
-      {%csrf_token%}
-      <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledges" aria-label="Search" name="searched">
-      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
-    </form>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+      </form>
       <div class="btn-group">
         <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
       <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
@@ -74,12 +210,7 @@
         {% endif %}
       </div>
     </nav>
-        <section style="background-color:#00a0ff; height:25; " >
-          <br>
-            <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
-            <br><br>
-            <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
-        </section><br>
+        
         <section style="text-align:justify;">
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissable fade show" roles="alert">
@@ -88,30 +219,42 @@
             <span aria-hidden="true">&times;</span>
         </button>
         </div>
+      </section>
         {% endfor %}
-        <center>
-    <h3>Sign In</h3>
-
-    <form action="/signin" method="post">
-    {% csrf_token %}
-
-    <form action="/action_page.php" method="post">
-        <div class="imgcontainer">
-          <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar" style=" width:100px; height :100px;border-radius:50%" >
-          <br>
-          <br>
-        </div>
-        <label for="">Employee ID</label> 
-        <input type="email" id="username" name="username" placeholder="Enter your employee id" Required>
-        <br>
-        <label for="">Password</label>
-        <input type="password" id="pass1" name="pass1" placeholder="Enter your password" Required>
-        <br>
-        
-        
-        <button type="submit" style="border-radius:5%">Sign In</button>
-    </form>
-  </center>
-  </section>
+        <div class="sgnin">
+        <div class="wrapper">
+          <div class="title">
+              SignIn
+          </div>
+          <form action="/signin" method="post">
+            {% csrf_token %}
+             <div class="field">
+                <input type="email" name="username" required>
+                <label>Employee Id</label>
+             </div>
+             <div class="field">
+                <input type="password" name="pass1" required>
+                <label>Password</label>
+             </div>
+             <div class="content">
+                <div class="checkbox">
+                   <input type="checkbox" id="remember-me">
+                   <label for="remember-me">Remember me</label>
+                </div>
+                <div class="pass-link">
+                   <a href="#">Forgot password?</a>
+                </div>
+             </div>
+             <div class="field">
+                <input type="submit" value="Login">
+             </div>
+             <div class="signup-link">
+                New at Knowledge Platform? <a href="/signup">Signup now</a>
+             </div>
+          </form>
+       </div>
+       
+  
+</div>
 </body>
-</html> 
+</html>
