@@ -60,39 +60,32 @@
   color: #000000;
   transform: rotateY(180deg);
 }
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
 
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
 }
 
 body {
   background: #F3F3F3;
+  font-weight: bold;
+}
+
+h1{
+  font-family : "Comic Sans MS";
+  color:#00a0ff;
 }
 
 header {
+  font-family : "Comic Sans MS";
   display: flex;
   justify-content: center;
   align-items: center;
   height: 60px;
+  color : #00a0ff;
   background-color: #EEE;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
@@ -107,7 +100,8 @@ main .list {
   width: 100%;
   max-width: 768px;
   background-color: #FFF;
-  border: 1px solid #CCC;
+  border: 2px solid #00a0ff;
+  border-radius:5%;
   margin-top: 25px;
 }
 
@@ -138,7 +132,7 @@ main .list .item:hover {
   outline: none;
   cursor: pointer;
 
-  background-color: #44AAEE;
+  background-color: #0096FF;
 
   margin: 5px;
   transition: 0.4s;
@@ -150,11 +144,11 @@ main .list .item:hover {
 }
 
 .pagenumbers button:hover {
-  background-color: #44EEAA;
+  background-color: blue;
 }
 
 .pagenumbers button.active {
-  background-color: #44EEAA;
+  background-color: blue;
   box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -176,7 +170,7 @@ main .list .item:hover {
 /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
 </script>
   <nav class="navbar navbar-expand-lg navbar-light bg-light" id="sh">
-  <a class="navbar-brand" href="#" ><img src="/static/30 - Copy.png" height="40" width="100"></a>
+  <a class="navbar-brand" href="#" ><img src="/static/31.png" height="40" width="100"></a>
   {% comment %} <a href="#">
     <img alt="Qries" src="/static/31.jfif" width="30" height="30">
  </a> {% endcomment %}
@@ -307,113 +301,7 @@ main .list .item:hover {
     </div>
 </div>
 
-<div class="container my-3">
-<h1 class="my-4 text-center" style="color: #00a0ff">Select from our top Knowledges</h1>
-      <div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/14.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>CData Connect Cloud is a cloud-native, no-code data connectivity solution that provides real-time access to all your cloud data to support BI and analytics, customer success, accounting, operations, and other business initiatives.</p>
-      
-    </div>
-  </div>
-</div>
 
-
-<div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/16.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>EDI doesn't have to be an obstacle to e-commerce with CData ArcESB. Learn how you can simplify e-commerce partner compliance, reduce chargebacks from platforms like Amazon Vendor Central, and automate away manual order entries.</p>
-    
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/15.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>As more applications and tools move to the cloud, your cloud data needs to continue to be easily accessible to your data and business experts. As an integration platform-as-a-service (IPaaS), CData Connect bridges the gap between cloud analytics and cloud data like nothing else.</p>
-      
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/17.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>Emerging technologies have introduced new challenges including data sprawl, migrating data from legacy systems, and automating previously manual tasks. It is therefore more important than ever to simplify data access to improve accuracy in repetitive reports, reduce waste, and lower costs.</p>
-      
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/18.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>CData offers connectivity to live data for every popular marketing technology (Martech) platform, from CRM and marketing automation, to social media and advertising tools. With powerful connectivity solutions and create in-depth reports on campaign performance.</p>
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/19.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>CData Sync is a lightweight application built to support data warehousing. With support for more than 250 SaaS applications, CData Sync provides a point-and-click interface for replicating enterprise data to any database, data warehouse, or data lake.</p>
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/20.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>CData offers a comprehensive platform for Salesforce data connectivity. Whether you need to access, analyze, store, or integrate with Salesforce data, we simplify Salesforce connectivity. </p>
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/21.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>CData offers an extensive suite of Snowflake data connectivity solutions. Whether you need to access Snowflake data or use Snowflake as a comprehensive data warehouse, we simplify Snowflake integration.</p>
-    </div>
-  </div>
-</div>
-
-<div class="flip-card" >
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="static/22.jfif" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <p>Standards-based connectivity through SQL helps overcome the challenges of distributed data -- simplifying connectivity across a broad range of data management applications, including BI & Analytics, Data Pipelines, Data Integration, Governance, and Application development.</p>
-    </div>
-  </div>
-</div>
-
-    </div>
     
     <script>
       $(document).on('click', '#confirm-delete', function(){
@@ -424,10 +312,10 @@ main .list .item:hover {
     {% comment %} trying pagination {% endcomment %}
 </head>
 <body>
-<header>
-<h1>Users</h1>
+<header style="background-color:linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%) ";>
+<h1>Knowledges</h1>
 </header>
-<main>
+<main style="background:linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
 <div class="list" id="list"></div>
 <div class="pagenumbers" id="pagination"></div>
 </main>
@@ -435,70 +323,69 @@ main .list .item:hover {
 
 </div>
 </body>
+
 <script>
-var data = JSON.parse("{{data|escapejs}}");
-const list_items = [];
-for(var x in data){
-list_items.push(data[x]);
-}
+  var data = JSON.parse("{{data|escapejs}}");
+  const list_items = [];
+  for(var x in data){
+    list_items.push(data[x]);
+  }
 
 
-const list_element = document.getElementById('list');
-const pagination_element = document.getElementById('pagination');
+  const list_element = document.getElementById('list');
+  const pagination_element = document.getElementById('pagination');
 
-let current_page = 1;
-let rows = 3;
+  let current_page = 1;
+  let rows = 3;
 
-function DisplayList (items, wrapper, rows_per_page, page) {
-wrapper.innerHTML = "";
-page--;
+  function DisplayList (items, wrapper, rows_per_page, page) {
+    wrapper.innerHTML = "";
+    page--;
 
-let start = rows_per_page * page; //0
-let end = start + rows_per_page;  //5
-let paginatedItems = items.slice(start, end);
+    let start = rows_per_page * page; //0
+    let end = start + rows_per_page;  //5
+    let paginatedItems = items.slice(start, end);
 
-for (let i = 0; i < paginatedItems.length; i++) {
-    let item = paginatedItems[i];
-    console.log(item);
-    let item_element = document.createElement('div');
-    item_element.classList.add('item');
-    item_element.innerText = item;
-    
-    wrapper.appendChild(item_element);
-}
-}
+    for (let i = 0; i < paginatedItems.length; i++) {
+        let item = paginatedItems[i];
+        let item_element = document.createElement('div');
+        item_element.classList.add('item');
+        item_element.innerText = item;
+        wrapper.appendChild(item_element);
+    }
+  }
 
-function SetupPagination (items, wrapper, rows_per_page) {
-wrapper.innerHTML = "";
+  function SetupPagination (items, wrapper, rows_per_page) {
+  wrapper.innerHTML = "";
 
-let page_count = Math.ceil(items.length / rows_per_page);
-for (let i = 1; i < page_count + 1; i++) {
-    let btn = PaginationButton(i, items);
-    wrapper.appendChild(btn);
-}
-}
+  let page_count = Math.ceil(items.length / rows_per_page);
+  for (let i = 1; i < page_count + 1; i++) {
+      let btn = PaginationButton(i, items);
+      wrapper.appendChild(btn);
+  }
+  }
 
-function PaginationButton (page, items) {
-let button = document.createElement('button');
-button.innerText = page;
+  function PaginationButton (page, items) {
+  let button = document.createElement('button');
+  button.innerText = page;
 
-if (current_page == page) button.classList.add('active');
+  if (current_page == page) button.classList.add('active');
 
-button.addEventListener('click', function () {
-    current_page = page;
-    DisplayList(items, list_element, rows, current_page);
+  button.addEventListener('click', function () {
+      current_page = page;
+      DisplayList(items, list_element, rows, current_page);
 
-    let current_btn = document.querySelector('.pagenumbers button.active');
-    current_btn.classList.remove('active');
+      let current_btn = document.querySelector('.pagenumbers button.active');
+      current_btn.classList.remove('active');
 
-    button.classList.add('active');
-});
+      button.classList.add('active');
+  });
 
-return button;
-}
+  return button;
+  }
 
-DisplayList(list_items, list_element, rows, current_page);
-SetupPagination(list_items, pagination_element, rows);
+  DisplayList(list_items, list_element, rows, current_page);
+  SetupPagination(list_items, pagination_element, rows);
 </script>
 
   

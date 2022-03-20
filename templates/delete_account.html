@@ -28,14 +28,14 @@
 
     <h4 style="margin-left: 25px; font-size:25px;font-family: 'Poppins', sans-serif !important; width:450px; word-wrap:break-word; text-decoration: none !important;">Hey <span style="text-decoration:none !important; color: #6ad2b7 !important;">{{ name }}</span>!</h4>
     <br>
-    <h4 style="margin:0; padding: 0; margin-left: 25px; font-size:25px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: bold !important;">Welcome to Knowledge Platform</h4>
+    <h4 style="margin:0; padding: 0; margin-left: 25px; font-size:25px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: bold !important;">Your account has been deleted from Knowledge Platform</h4>
     <br>
-    <h4 style="margin:0; padding: 0; margin-left: 25px; font-size:25px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: bold !important;">Please confirm your email by clicking on the activate button.</h4>
+    {% comment %} <h4 style="margin:0; padding: 0; margin-left: 25px; font-size:25px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: bold !important;">Please confirm your email by clicking on the activate button.</h4> {% endcomment %}
 
     <br>    
     <br>
 
-    <span><h3 style="margin:0; padding: 0; margin-left: 25px; font-size:21px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: normal !important;"><a class="btn btn-primary" href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}">Activate</a></h3></span>
+    {% comment %} <span><h3 style="margin:0; padding: 0; margin-left: 25px; font-size:21px; font-family: 'Poppins', sans-serif !important; color: #241f20 !important; font-weight: normal !important;"><a class="btn btn-primary" href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}">Activate</a></h3></span> {% endcomment %}
 
     <br>
     <br>

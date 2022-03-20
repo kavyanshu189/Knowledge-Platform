@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from typing import final
 from django.shortcuts import render, HttpResponse, redirect
 from datetime import datetime
@@ -6,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from matplotlib import gridspec
-from numpy import searchsorted
 from pymongo import MongoClient
 from email import message
 from email.policy import HTTP
@@ -46,6 +44,7 @@ from json import dumps
 gfName=""
 uniqueId=""
 uName=""
+emailId=""
 ppsummary=""
 ppdescription=""
 pproducts=[]
@@ -60,7 +59,6 @@ finaltags=[]
 uniqueId2=""
 
 # Create your views here.
-
 def index(request):
     conn = MongoClient()
     db=conn.Lucid
@@ -81,18 +79,16 @@ def index(request):
                     flag = 1
                     for p in v:
                         if flag==1:
-                            v =  "\n"+k.upper() + " -> "  + p
+                            v =  "\n"+k.upper() + " : "  + p
                         else:
+                            flag = 0
                             v += "\n" + p 
                 else:
-                    v = v.replace(","," ")
-                    v = "\n"+k.upper() + " -> " + v 
+                    v = v.replace(".","")
+                    v = "\n"+k.upper() + " : " + v 
                 new_data_dic[keys].append(v)
-        key+=1    
-    print("this one")
-    print(new_data_dic)     
-
-
+        key+=1      
+        
     # all_data_dic = {'_id':[],'date_of_entry':[],'date_of_login':[],'ptype':[],'support Ticket':[],'psummary':[],'pdescription':[],'products':[],'kanalysis':[],'kinsisghts':[],'tags':[],'owner':[],'ID':[]}
     # for collection in coll:
     #     for k,v in collection.items():
@@ -139,23 +135,24 @@ def signup(request):
         myuser.last_name = lname
         myuser.is_active = False
         myuser.save()
+        global uName
+        uName = fname
+        global emailId
+        emailId = email 
+
         
         messages.success(request, " We have sent account activation link to your registered mail id. Kindly click on the link to activate your account .")
         
         
         #welcome email
         
-        subject = "Welcome to Knowledge Platform - Login Page!"
-        message = "Hello " + myuser.first_name + "! \n" + "Welcome to Knowledge Platform!  \n Thank You for visiting our website \n We have also sent you a confirmation email, Please confirm your email address in order to activate yor account. \n\n Regards\n Team Knowledge Platform"
-        from_email = settings.EMAIL_HOST_USER
-        to_list = [myuser.email]
-        send_mail(subject, message, from_email, to_list, fail_silently=True)
+        
         
         
         #Email Address confirmation email
         
         current_site = get_current_site(request)
-        email_subject = "Confirm your email @ Knowledge Platform - Django Login"
+        email_subject = "Confirm your email @ Knowledge Platform"
         message2 = render_to_string('email_confirmation.html',{
             'name':myuser.first_name,
             'domain': current_site.domain,
@@ -169,6 +166,7 @@ def signup(request):
             [myuser.email],
         )
         email.fail_silently = True
+        email.content_subtype = "html"
         email.send()
         
         return redirect('signin')
@@ -179,14 +177,25 @@ def signup(request):
 def delete_account(request):
     global uName
     print(uName)
+    global emailId
+    print(emailId)
     user = User.objects.get(username = uName)
     user.delete()
     messages.success(request, "Account Deleted Successfully")
-    subject = "Account Deleted Successfully!!"
-    message = "Hello " + user.first_name + "! \n" + "Your Account has been successfully deleted from our Platform.  \nThank You for using our Platform. We hope you definitely got a great experience of using our platform. \nHope to See you soon. \n\n Regards\n Team Knowledge Platform"
-    from_email = settings.EMAIL_HOST_USER
-    to_list = [user.email]
-    send_mail(subject, message, from_email, to_list, fail_silently=True)
+    email_subject = "Account Delete Notification"
+    message2 = render_to_string('delete_account.html',{
+        'name':uName,
+    })
+    email = EmailMessage(
+        email_subject,
+        message2,
+        settings.EMAIL_HOST_USER,
+        [emailId],
+    )
+    email.fail_silently = True
+    email.content_subtype = "html"
+    email.send()
+    
     return redirect('home')
 
 def contribute(request):
@@ -244,30 +253,18 @@ def contribute(request):
         print(finaltags,"finaaaaaaaaal",tags_string)     
 
         # #added neo4j database
-       
-        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-        session=graphdb.session()
-        q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
-        WITH kp
-        UNWIND split('%s',',') AS tag
-        MERGE (t:tags_string {tagname: tag})
-        MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
-        # q5="drop index kpindex"
-        # q6="drop index rindex"
-        # q3="CREATE FULLTEXT INDEX kpindex FOR (n: knowledge|tags) ON EACH [n.ptype, n.pdescription,n.owner,n.kanalysis, n.kinsisghts,n.products,n.tags]"
-        # q4="CREATE FULLTEXT INDEX rindex FOR ()-[r:belongs_to]-() ON EACH [r.tagname]"
-        q1=" match(n) return n "
+        # neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,ptype,psummary,pdescription,kanalysis,kinsisghts)
+        # graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        # session=graphdb.session()
+        # q2='''Merge (kp:knowledge {pdescription: '%s', ptype: '%s', psummary: '%s',id: '%s' , kanalysis:'%s', kinsisghts:'%s', owner:'%s', products:'%s'})
+        # WITH kp
+        # UNWIND split('%s',',') AS tag
+        # MERGE (t:tags_string {tagname: tag})
+        # MERGE (kp)-[:belongs_to]->(t)'''%(pdescription,ptype,psummary,uniqueId2,kanalysis,kinsisghts,owner,*products,finaltags)
+        # q1=" match(n) return n "
     
-        session.run(q2)
-
-        # we are commented out because we are creating index in neo4j if doing and redoing again here will 
-        # increase computing and also might throw error like this index already exists  
-
-        # session.run(q5) 
-        # session.run(q6)
-        # session.run(q3)
-        # session.run(q4)
-        session.run(q1)
+        # session.run(q2)
+        # session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
         return redirect('filltags')
@@ -304,19 +301,16 @@ def defects(request):
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
-global searched
-# def defect(request):
-#     conn = MongoClient()
-#     db=conn.Lucid
-#     collection=db.knowledge
-#     if request.method=="POST":
-#         searched=request.POST['searched']
-#     graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-#     session=graphdb.session()
-#     q3='''CALL db.index.fulltext.queryNodes("kpindex", %s) YIELD node, score RETURN node.ptype,node.id,node.owner node.pdescription, score''' %(searched)
-#     nodes=session.run(q3)
-   
-#     return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
+def defect(request):
+    # conn = MongoClient()
+    # db=conn.Lucid
+    # collection=db.knowledge
+    # defectdata =collection.find({'ptype':'defect'})
+    graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+    session=graphdb.session()
+    q3="Match (t:Problem_Type)-[r:PROBLEM_DESCRIPTION]-> (c:Problem_Description) return t.ptype AS p_type,c.pdescription AS p_description"
+    nodes=session.run(q3)
+    return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
 
 def enhancements(request):
     conn = MongoClient()
@@ -498,7 +492,7 @@ def search(request):
     nodes=session.run(q3) 
     # print(*nodes)
     # we are showing results on page name defect
-    return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
+    return render(request, 'knowledgepages/defect.html', {'nodes': nodes})
 
 def your_Contribution(request):
     conn = MongoClient()
@@ -603,8 +597,7 @@ def generate_tags(request):
         print(s)
         s = s.lower()
         
-        keywords=["data", "connect", "bi", "analytics", "arcESB", "IPaas", "cdata", "drivers", "neo4j", "django", "server", "data", " error", "jira" ,"salesforce","test"]
-        
+        keywords=["data", "connect", "bi", " Freshdesk", "arcESB", "IPaas", "cdata", "driver", "neo4j", "django", "server", "data", " error", "jira" ,"salesforce"," sync", "python", "java", "sync", "server", "port", "error", "dict", "apache"]
         for k in range(0,len(keywords)):
             keywords[k] = keywords[k].lower()
 
@@ -643,7 +636,3 @@ def generate_tags(request):
         #return redirect("home")
 
     return render(request,"authentication/filltags.html", taggs)
-
-
-
-

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -11,40 +11,78 @@
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <title> {% block title %}Contribute{% endblock title %} | Knowledge Platform </title>
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    {% comment %} <script>
 
-      $(document).ready(function () {
-  
-          $('#ptype').change(function () {
-              var szTr;
-              var iRowCount = 0;
-  
-              var szSelectedText = $(this).find('option:selected').text();
-  
-  
-              if ($("#table tbody tr:has(td:eq(1):contains('" + szSelectedText + "'))").length > 0) {
-                  alert("Duplicate!!!!")
-                  return;
-              }
-              else {
-                  iRowCount = $('#table tbody tr').length + 1;
-                  szTr = "<tr>"
-                  szTr = szTr + "<td>" + iRowCount + "</td>";
-                  szTr = szTr + "<td>" + $(this).find('option:selected').text() + "</td>"
-                  szTr = szTr + "<td><input type='text' class='date_from' placeholder='Enter your ticket id.'></td>"
-                  szTr = szTr + "<td class='delete'>Delete</td>"
-                  szTr = szTr + "</tr>"
-                  $('#table tbody').append(szTr)
-              }
-  
-          });
-  
-          $('#table').on('click','.delete',function () {
-            $(this).closest('tr').remove();
-            $('#btnSort').trigger('click');
-        });
-      });
-  </script> {% endcomment %}
+    <style>
+      body {
+        background: linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+      }
+      
+      *{
+        font-family: Times New Roman;
+      }
+      .body{  
+        background-color: #00a0ff;
+        font-size:18px;
+        font-weight:bolder;
+      }  
+      .container {  
+          padding: 50px;  
+        background-color:white;
+        margin:30px 80px;
+        border:2px solid #00a0ff;
+        border-radius:12px;
+      }  
+        
+      input[type=text], input[type=password], textarea {  
+        width: 100%;  
+        padding: 15px; 
+        font-weight:bolder;
+        font-size:18px;
+        margin: 5px 0 22px 0;  
+        display: inline-block;  
+        border: 1.5px solid #00a0ff;  
+        background: #fff;  
+      }  
+      input[type=text]:focus, input[type=password]:focus {  
+        background-color: #fff;  
+        outline: none;  
+      }  
+       div {  
+                  padding: 10px 0;  
+               }  
+      hr {  
+        border: 1px solid #00a0ff;  
+        margin-bottom: 25px;  
+        background-color:#00a0ff;
+      }  
+      .registerbtn {  
+        background-color: #00a0ff;  
+        color: white;  
+        padding: 16px 20px;  
+        margin: 8px 0;  
+        border: none;  
+        cursor: pointer;  
+        width: 20%;  
+        opacity: 0.9;  
+        font-size:20px;
+        align: center;
+      }  
+      .registerbtn:hover {  
+        opacity: 1; 
+        background-color:#4CAF50 
+      }  
+      
+      #pmap
+      {
+      font-size:18px;
+      
+      } 
+      .req
+      {
+      color:red;
+      }     
+      
+      </style> 
   
   
 </head>
@@ -117,81 +155,71 @@
 {% comment %} Navigation ends here {% endcomment %}
 
 
-    <section style="background-color:#00a0ff; height:25; " >
-      <br>
-      <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1><br>
-      <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
-    </section>
     {% if user.is_authenticated %}
 <div class="container mb-3 py-4">
-    <h1 class="text-center" style = "color : #00a0ff";>Contribute Knowledge</h1><br>
-    <center>
-    <form method="post" action="/contribute"  enctype="multipart/form-data">
+  <center>  <h1> Contribute Knowledge</h1> </center>  
+  <hr>  
+  <br>
+
+  <form method="post" action="/contribute"  enctype="multipart/form-data">
     {% csrf_token %}
-    {% comment %} <div class="form-group">
-      <label for="ptype">Problem Type</label> 
-      
-      <select id="ptype" name="ptype">
-          <option value="defect">Defect</option>
-          <option value="enhancement">Enhancement</option>
-          <option value="supportticket">Support Ticket</option>
-          <option value="opportunity">Opportunity</option>
-      </select> 
-  </div> {% endcomment %}
-    <div class="form-group" >
-      <label for="ptype">Problem Type</label> <br>
-    <select id="ptype" name="ptype" required>
-      <option value="Problem Type">Choose your problem type</option>
-      <option value="defect">Defect</option>
-      <option value="enhancement">Enhancement</option>
-      <option value="support Ticket">Support Ticket</option>
-      <option value="opportunity">Opportunity</option>
-    </select>
-    <table id="table" ><thead><tr></thead><tbody></tbody></table>
-        </div>
+
+<center>
+<div class="form-group" >  
+<label for="ptype"></label>  
+<select id="ptype" name="ptype" required style="width:210px;height:40px;font-weight:bolder;">
+<option value="Problem Type" style="font-size:18px;">Choose your Problem Type</option>  
+<option value="defect" style="font-size:18px;">Defect</option>  
+<option value="enhancement" style="font-size:18px;">Enhancement</option>  
+<option value="support Ticket" style="font-size:18px;">Support Ticket</option>  
+<option value="opportunity" style="font-size:18px;">Opportunity</option>  
+</select>  
+</div> 
+</center>
 
 
-        <div class="form-group">
-            <label for="psummary">Problem Summary</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="psummary" name="psummary" required cols="80" rows="10" placeholder="Enter your Problem Summary"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="pdescription">Problem Description</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="pdescription" name="pdescription" required cols="80" rows="10" placeholder="Enter your Problem description"></textarea>
-        </div>      
-        
-        <div class="form-group">
-          <label for="CD" required>Products Mapped: </label><br>
+<div class="form-group">
+<label for="psummary"></label> <br>
+<textarea type="Summary" id="psummary" name="psummary" placeholder="Enter Problem Summary" required cols="80" rows="5" placeholder="Enter your Problem Summary"></textarea>
+</div> <br>
+
+<div class="form-group">
+<label for="pdescription"></label> <br>
+<textarea type="Summary" id="pdescription" name="pdescription" placeholder="Enter Problem Description" required cols="80" rows="5" placeholder="Enter your Problem description"></textarea>
+</div><br>
+
+<div class="form-group">
+          <label for="CD" required><strong>Products Mapped </strong></label>&nbsp
+        <div id="pmap">
           <input type="checkbox" name="CD" value="CData Drivers">CData Drivers
           <input type="checkbox" name="CD" value="CData ArcESB">CData ArcESB
           <input type="checkbox" name="CD" value="CData Connect">CData Connect
-          <br><br>
           <input type="checkbox" name="CD" value="CData Sync">CData Sync
           <input type="checkbox" name="CD" value="CData Server">CData Server
           <input type="checkbox" name="CD" value="CData DBAmp">CData DBAmp
       </div>
+      </div><br>
 
-        <div class="form-group">
-            <label for="kanalysis">Knowledge Analysis</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kanalysis" required name="kanalysis" cols="80" rows="5" placeholder="Enter your Knowledge Analysis"></textarea>
+<div class="form-group">
+<label for="kanalysis"></label> <br>
+<textarea type="text" id="kanalysis" required placeholder="Knowledge Analysis" name="kanalysis" cols="80" rows="5" placeholder="Enter your Knowledge Analysis"></textarea>
+</div>  <br>
 
-        </div>      
-        
-        <div class="form-group">
-            <label for="kinsisghts">Knowledge Insights</label> <br>
-            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" required id="kinsisghts" name="kinsisghts" cols="80" rows="5" placeholder="Enter your Knowledge Insights"></textarea>
+<div class="form-group">
+<label for="kinsisghts"></label> <br>
+<textarea type="text" required id="kinsisghts" placeholder="Knowledge Insights" name="kinsisghts" cols="80" rows="5" placeholder="Enter your Knowledge Insights"></textarea>
+</div>  <br>
 
-        </div>   
-        
 
-        <div class="form-group">
-            <label for="owner">Owner</label> <br>
-            <input type="text" id="owner" name="owner" required>
-        </div>   
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </form>
-  </center>
+<div class="form-group"> 
+<label for="owner"></label> <br>
+<input type="text" id="owner" placeholder="Owner" name="owner" required>
+</div><br>
+ 
+    <center><button type="submit" class="registerbtn">Submit</button></center>    
+</form>  
+</div>
+
     {% else %}
     <center>
     <h3> Oops!! You are not logged in.</h3>

@@ -9,141 +9,47 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
     <title> {% block title %}Sign In{% endblock title %} | Knowledge Platform</title>
     <style>
-      @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-      *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        {% comment %} font-family: 'Poppins', sans-serif; {% endcomment %}
-        font-family:Arial;
+      body {
+        background: linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
       }
-      .sgnin{
-        display: grid;
-        height: 100%;
-        width: 100%;
-        place-items: center;
-        background-color:rgb(37, 150, 190)
-        /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
-      }
-      ::selection{
-        background: #4158d0;
-        color: #fff;
-      }
-      .wrapper{
-        width:500px;
-        background: #fff;
-        border-radius: 15px;
-        box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
-      }
-      .wrapper .title{
-        font-size: 35px;
-        font-weight: 600;
-        text-align: center;
-        line-height: 100px;
-        font-family:Arial;
-        color: #fff;
-        user-select: none;
-        border-radius: 15px 15px 0 0;
-        background: linear-gradient(-135deg, #00aaff, #09c6f9);
-      }
-      .wrapper form{
-        padding: 10px 30px 50px 30px;
-      }
-      .wrapper form .field{
+      .form-style input {
+        border: 0;
         height: 50px;
-        width: 100%;
-        margin-top: 20px;
-        position: relative;
+        border-radius: 0;
+        border-bottom: 1px solid #ebebeb;
       }
-      .wrapper form .field input{
-        height: 100%;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        padding-left: 20px;
-        border: 1px solid lightgrey;
-        border-radius: 25px;
-        transition: all 0.3s ease;
+      .form-style input:focus {
+        border-bottom: 1px solid #007bff;
+        box-shadow: none;
+        outline: 0;
+        background-color: #ebebeb;
       }
-      .wrapper form .field input:focus,
-      form .field input:valid{
-        border-color: #4158d0;
-      }
-      .wrapper form .field label{
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        color: #999999;
-        font-weight: 400;
-        font-size: 17px;
-        pointer-events: none;
-        transform: translateY(-50%);
-        transition: all 0.3s ease;
-      }
-      form .field input:focus ~ label,
-      form .field input:valid ~ label{
-        top: 0%;
-        font-size: 16px;
-        color: #4158d0;
-        background: #fff;
-        transform: translateY(-50%);
-      }
-      form .content{
+      .sideline {
         display: flex;
         width: 100%;
-        height: 110px;
-        font-size: 16px;
-        align-items: center;
-        justify-content: space-around;
-      }
-      form .content .checkbox{
-        display: flex;
-        align-items: center;
         justify-content: center;
-      }
-      form .content input{
-        width: 15px;
-        height: 15px;
-        background: red;
-      }
-      form .content label{
-        color: #262626;
-        user-select: none;
-        padding-left: 5px;
-      }
-      form .content .pass-link{
-        color: "";
-      }
-      form .field input[type="submit"]{
-        color: #fff;
-        border: none;
-        padding-left: 0;
-        margin-top: -10px;
-        font-size: 20px;
-        font-weight: 500;
-        cursor: pointer;
-        background: linear-gradient(-135deg, #00aaff, #09c6f9);
-        transition: all 0.3s ease;
-      }
-      form .field input[type="submit"]:active{
-        transform: scale(0.95);
-      }
-      form .signup-link{
-        color: #262626;
-        margin-top: 20px;
+        align-items: center;
         text-align: center;
+        color: #ccc;
       }
-      form .pass-link a,
-      form .signup-link a{
-        color: #4158d0;
-        text-decoration: none;
+      button {
+        height: 50px;
       }
-      form .pass-link a:hover,
-      form .signup-link a:hover{
-        text-decoration: underline;
+      .sideline:before,
+      .sideline:after {
+        content: "";
+        border-top: 1px solid #ebebeb;
+        margin: 0 20px 0 0;
+        flex: 1 0 20px;
       }
+      
+      .sideline:after {
+        margin: 0 0 0 20px;
+      }
+      
     </style>
   </head>
     <body><nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -221,40 +127,40 @@
         </div>
       </section>
         {% endfor %}
-        <div class="sgnin">
-        <div class="wrapper">
-          <div class="title">
-              SignIn
+        <div class="container">
+          <div class="row m-5 no-gutters shadow-lg">
+            <div class="col-md-6 d-none d-md-block">
+              <img src="https://images.unsplash.com/photo-1566888596782-c7f41cc184c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=2134&q=80" class="img-fluid" style="min-height:100%;" />
+            </div>
+            <div class="col-md-6 bg-white p-5">
+              <h3 class="text-center"><strong>Login</strong></h3>
+              <div class="form-style">
+                <form action="/signin" method="post">
+                  {% csrf_token %}
+                  <div class="form-group pb-3">
+                    <input type="email" placeholder="Employee Id" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  </div>
+                  <div class="form-group pb-3">
+                    <input type="password" placeholder="Password" name="pass1" class="form-control" id="exampleInputPassword1">
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center"><input name="" type="checkbox" value="" /> <span class="pl-2 font-weight-bold">Remember Me</span></div>
+                    <div><a href="#">Forget Password?</a></div>
+                  </div>
+                  <div class="pb-2">
+                    <button type="submit" class="btn btn-dark w-100 font-weight-bold mt-2">Submit</button>
+                  </div>
+                </form>
+                <div class="sideline">OR</div>
+                <div>
+                  <button type="submit" class="btn btn-primary w-100 font-weight-bold mt-2">Login With ZOHO</button>
+                </div>
+                <div class="pt-4 text-center"><a href="/signup"">Sign Up</a>
+                </div>
+              </div>
+        
+            </div>
           </div>
-          <form action="/signin" method="post">
-            {% csrf_token %}
-             <div class="field">
-                <input type="email" name="username" required>
-                <label>Employee Id</label>
-             </div>
-             <div class="field">
-                <input type="password" name="pass1" required>
-                <label>Password</label>
-             </div>
-             <div class="content">
-                <div class="checkbox">
-                   <input type="checkbox" id="remember-me">
-                   <label for="remember-me">Remember me</label>
-                </div>
-                <div class="pass-link">
-                   <a href="#">Forgot password?</a>
-                </div>
-             </div>
-             <div class="field">
-                <input type="submit" value="Login">
-             </div>
-             <div class="signup-link">
-                New at Knowledge Platform? <a href="/signup">Signup now</a>
-             </div>
-          </form>
-       </div>
-       
-  
-</div>
+        </div>
 </body>
 </html>
