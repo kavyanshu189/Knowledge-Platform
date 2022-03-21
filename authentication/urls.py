@@ -7,6 +7,7 @@ from authentication import views
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 admin.site.site_header = "Knowledge Platform Admin"
 admin.site.site_title = "Knowledge Platform Admin Portal"
 admin.site.index_title = "Welcome to CData Knowledge Platform"
@@ -40,5 +41,9 @@ urlpatterns = [
    path('generate_tags',views.generate_tags,name ="generate_tags"),
    path('filltags',views.generate_tags, name="filltags"),
    path('contribute_neo4j',views.contribute_neo4j, name="contribute_neo4j"),
+   
+   path('forget_password',views.forget_password,name='forget_password'),
+   path('activate2/<uidb64>/<token>/', views.activate2, name="activate2"),
+   path('change_password_form', views.change_password_form, name="change_password_form"),
 
 ]

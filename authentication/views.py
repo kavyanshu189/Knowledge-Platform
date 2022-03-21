@@ -636,3 +636,69 @@ def generate_tags(request):
         #return redirect("home")
 
     return render(request,"authentication/filltags.html", taggs)
+
+rrrname=""
+def forget_password(request):
+    if request.method=="POST":
+        username=request.POST.get("username")
+        global rrrname
+        rrrname=username
+
+        if not User.objects.filter(username=username):
+            messages.success(request, "No user found")
+            return redirect("home")
+        
+        else:
+            user_obj=User.objects.get(username=username)
+            current_site = get_current_site(request)
+            email_subject = "Your forget Password link"
+            message2 = render_to_string('authentication/change_password.html',{
+            'name':user_obj.first_name,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user_obj.pk)),
+            'token': generate_token.make_token(user_obj)
+        })
+            email = EmailMessage(
+            email_subject,
+            message2,
+            settings.EMAIL_HOST_USER,
+            [user_obj.email],
+        )
+            email.fail_silently = True
+            email.content_subtype = "html"
+            email.send()
+            messages.success(request, " We have sent link to your registered email for reset password.")
+
+    return render(request,'authentication/forget_password.html')
+
+def activate2(request, uidb64, token):
+    
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        myuser = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        myuser = None
+        
+    if myuser is not None and generate_token.check_token(myuser, token):
+        myuser.is_active = True
+        myuser.save()
+        return render(request,'authentication/change_password_form.html')
+    else:
+        return render(request, 'activation_failed.html')
+
+def change_password_form(request):
+    global rrrname
+    if request.method=="POST":
+        pass1=request.POST.get('pass1')
+        pass2=request.POST.get('pass2')
+        if(pass1!=pass2):
+            messages.success(request,"Password not Matched")
+            return render(request,"authentication/change_password_form.html")
+        else:
+            user_obj=User.objects.get(username=rrrname)
+            user_obj.set_password(pass1)
+            user_obj.save()
+            messages.success(request,"Password changed Successfully")
+            return render(request,"authentication/signin.html")
+        
+    return render(request,'authentication/change_password_form.html')
