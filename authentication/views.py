@@ -423,7 +423,7 @@ def freshdeskdisplay(request):
 
 
 def jira(request):
-    conn = mod4.connect("User=knowledgeplatform64@gmail.com;APIToken=pp2JzKWK1M7Oo4MqfgjV524F;Url=https://knowledgeplatform64.atlassian.net")
+    conn = mod4.connect("User=knowledgeplatform64@gmail.com;APIToken=Q5J8Y9Yp7y2OmpEclNUk68A7;Url=https://knowledgeplatform64.atlassian.net")
     # cur = conn.execute("SELECT Summary, Id, Description FROM Issues where id=10000")
     if request.method == 'POST':
         bug_id = request.POST['jiraid']
@@ -473,9 +473,6 @@ def salesforce(request):
         d2['id'].append(t[2])
 
     return render(request, 'knowledgepages/salesforce.html')          
-
-
- 
 
 
 def salesforcedisplay(request):

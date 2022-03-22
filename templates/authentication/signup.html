@@ -17,6 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title> {% block title %}Sign Up{% endblock title %} | Knowledge Platform</title>
     <style>
       body {
@@ -70,7 +71,7 @@
     <body>
       <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
+      <a class="navbar-brand" href="#"><img src="/static/29.png" height="40" width="120"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -78,7 +79,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/"><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
           </li>      
       
           <li class="nav-item">
@@ -97,10 +98,22 @@
             <a class="dropdown-item" href="supportticket">Support Ticket</a>
           </div>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Issue Tracking
+          </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="jira">Jira</a>
+          <a class="dropdown-item" href="salesforce">Salesforce</a>
+          <a class="dropdown-item" href="freshdesk">FreshDesk</a>
+        </div>
+      </li>
+
       </div>
         <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+          <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledges" aria-label="Search">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="fa fa-fw fa-search"></i></button> &nbsp &nbsp&nbsp&nbsp
         </form>
       
       <div class="btn-group">
