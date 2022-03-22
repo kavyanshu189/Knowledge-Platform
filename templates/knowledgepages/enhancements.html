@@ -1,132 +1,359 @@
-<!DOCTYPE html>
-<html>
+<html lang="en" >
 <head>
-  <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <title>Product Knowledge</title>
+  
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
-    <style>
-        table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-    </style>
-    <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">       
-    <title> {% block title %}Enhancement{% endblock title %} | Knowledge Platform</title>
-  </head>
-    <body><nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <style>
+    body {
+      background: linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+    }
+    section {
+      background: linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+      
+      padding: 30px 20px;
+    }
+     
+    .dashboard-cards {
+      position: relative;
+      padding-bottom: 50px;
+      margin: 0 !important;
+    }
+     
+    .dashboard-cards .card {
+      background: #ffffff;
+      display: inline-block;
+      -webkit-perspective: 1000;
+      perspective: 1000;
+      z-index: 20;
+      padding: 0 !important;
+      margin: 5px 5px 10px 5px;
+      position: relative;
+      text-align: left;
+      transition: all 0.3s 0s ease-in;
+      z-index: 1;
+      width: calc(33.33333333% - 10px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+     
+    .dashboard-cards .card:hover {
+      box-shadow: 0 15px 10px -10px rgba(31, 31, 31, 0.5);
+      transition: all 0.3s ease;
+    }
+     
+    .dashboard-cards .card .card-title {
+      background: #ffffff;
+      padding: 20px 15px;
+      position: relative;
+      z-index: 0;
+    }
+     
+    .dashboard-cards .card .card-title h2 {
+      font-size: 24px;
+      letter-spacing: -0.05em;
+      margin: 0;
+      padding: 0;
+    }
+     
+    .dashboard-cards .card .card-title h2 small {
+      display: block;
+      font-size: 14px;
+      margin-top: 8px;
+      letter-spacing: -0.025em;
+    }
+     
+    .dashboard-cards .card .card-description {
+      position: relative;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      padding: 10px 15px 0 15px;
+    }
+     
+    .dashboard-cards .card .card-actions {
+      box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.075);
+      padding: 10px;
+      text-align: center;
+    }
+     
+    .dashboard-cards .card .card-flap {
+      background: #d9d9d9;
+      position: absolute;
+      width: 100%;
+      -webkit-transform-origin: top;
+      transform-origin: top;
+      -webkit-transform: rotateX(-90deg);
+      transform: rotateX(-90deg);
+    }
+     
+    .dashboard-cards .card .flap1 {
+      transition: all 0.3s 0.3s ease-out;
+      z-index: -1;
+    }
+     
+    .dashboard-cards .card .flap2 {
+      transition: all 0.3s 0s ease-out;
+      z-index: -2;
+    }
+     
+    .dashboard-cards.showing .card {
+      cursor: pointer;
+      opacity: 0.6;
+      -webkit-transform: scale(0.88);
+      transform: scale(0.88);
+    }
+     
+    .dashboard-cards .no-touch .dashboard-cards.showing .card:hover {
+      opacity: 0.94;
+      -webkit-transform: scale(0.92);
+      transform: scale(0.92);
+    }
+     
+    .dashboard-cards .card.d-card-show {
+      opacity: 1 !important;
+      -webkit-transform: scale(1) !important;
+      transform: scale(1) !important;
+    }
+     
+    .dashboard-cards .card.d-card-show .card-flap {
+      background: #ffffff;
+      -webkit-transform: rotateX(0deg);
+      transform: rotateX(0deg);
+    }
+     
+    .dashboard-cards .card.d-card-show .flap1 {
+      transition: all 0.3s 0s ease-out;
+    }
+     
+    .dashboard-cards .card.d-card-show .flap2 {
+      transition: all 0.3s 0.2s ease-out;
+    }
+     
+    .dashboard-cards .card .task-count {
+      width: 60px;
+      height: 40px;
+      position: absolute;
+      top: 22px;
+      right: 10px;
+      background: #ffffff;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 100%;
+      color: #00a0ff;
+      font-weight: 600;
+      transition: all .2s ease;
+    }
+     
+    .dashboard-cards .task-list {
+      padding: 0 !important;
+    }
+     
+    .dashboard-cards .task-list li {
+      padding: 10px 0;
+      padding-left: 10px;
+      margin: 3px 0;
+      list-style-type: none;
+      border-bottom: 1px solid #e9ebed;
+      border-left: 3px solid #00a0ff;
+      transition: all .2s ease;
+    }
+     
+    .dashboard-cards .task-list li:hover {
+      background: #ecf0f1;
+      transition: all .2s ease;
+    }
+     
+    .dashboard-cards .task-list li span {
+      float: right;
+      color: #00a0ff;
+      margin-right: 5px;
+    }
+     
+    .dashboard-cards.showing .card.d-card-show .task-count {
+      color: #00a0ff;
+      background: #ffffff;
+      transition: all .2s ease;
+    }
+     
+    .dashboard-cards .card-actions .btn {
+      color: #ffffff;
+    }
+     
+    .dashboard-cards .card-actions .btn:hover {
+      color: #ff3a3a;
+    }
+    @media (max-width:750px) {
+      .dashboard-cards .card {
+        margin-top: 10px;
+        width: 100%;
+      }
+    }
+    .search-container {
+      max-width: 900px;
+      margin: 0px auto;
+  }
+  input[type="text"] {
+      display: block;
+      width: calc(100% - 4px); /*20px [ left & Right ] padding + 4px border [ left & Right ] */ 
+      font-size: 18px;
+      font-weight: 600;
+      color: #00a0ff;
+      padding: 10px;
+      border: 2px solid #00a0ff;
+  }
+  
+  .search-container form {
+      position: relative;
+  }
+  .search-container form button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 50px;
+      background: transparent;
+      border: transparent;
+      font-size: 20px;
+      color: #00a0ff;
+      cursor: pointer;
+      outline: 0;
+  }
+  .mytile
+  {
+    display: block;
+  }
+</style>
+</head>
+<body>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item inactive">
-            <a class="nav-link" href="/">Home </a>
-          </li>      
+<section >
+  <a class="nav-link" href="/" style="color:white ; width:200% ; height:200% ;"><strong><i class="fa fa-fw fa-home"></i>Home</strong><span class="sr-only">(current)</span></a>
+  <br><br>
+  <div class="search-container" style="display:inline";>
+    <form action="">
+      <input type="text" placeholder="Search..." name="search" id="searchitem" onkeyup="search_kp()">
+      <button type="submit" ><i class="fa fa-search"></i></button>
       
-          <li class="nav-item">
-            <a class="nav-link" href="/contribute">Contribute</a>
-          </li>
-          <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Filter Knowledges <span class="sr-only">(current)</span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="defects" >Defects <span class="sr-only">(current)</span></a>
-              <a class="dropdown-item" href="enhancements">Enhancement</a>
-              <a class="dropdown-item" href="opportunity">Opportunity</a>
-              <a class="dropdown-item" href="supportticket">Support Ticket</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Issue Tracking
-          </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="jira">Jira</a>
-          <a class="dropdown-item" href="salesforce">Salesforce</a>
-          <a class="dropdown-item" href="freshdesk">FreshDesk</a>
-        </div>
-      </li> 
-      
-      </div>
-      <form class="form-inline my-2 my-lg-0" method=POST action={% url 'search'%} >
-        {%csrf_token%}
-        <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledges" aria-label="Search" name="searched">
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
-      </form>
-      
-      <div class="btn-group">
-        <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
-        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
-          <p style="display:inline">{{user.first_name}}</p>
-          <span class="visually-hidden"></span>
-        </button>
-        {% if user.is_authenticated %}
-        <ul class="dropdown-menu">
-          {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
-          {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
-          <li><a class="dropdown-item" href="/signout">Sign out</a></li>
-        </ul>
-        {% else %}
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
-      <li><a class="dropdown-item" href="/signin">Sign in</a></li>
-      {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
-    </ul>
-    {% endif %}
-      </div>
-    </nav>
-    <section style="background-color:#00a0ff; height:25; " >
-      <br>
-      <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
-      <br><br>
-      <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
-    </section><br>
-<div class="container mb-3 py-4">
-    <h1 class="text-center" style = "color : #00a0ff ";>Enhancement</h1><br>
-    <center>
-    <table>
-        <tr>
-          <th>Problem Type</th>
-          <th>Problem Summary</th>
-          <th>Problem Description</th>
-          <th>Knowledge Analysis</th>
-          <th>Knowledge Insights</th>
-        </tr>
-        {% for x in enhancementdata %}
-    
-        <tr>
-          <td>{{x.ptype}}</td>
-          <td>{{x.psummary}}</td>
-          <td>{{x.pdescription}}</td>
-          <td>{{x.kanalysis}}</td>
-          <td>{{x.kinsisghts}}</td>
-        </tr>
-        {%endfor%}
-    
-      </table>
-    
-    
-    
-        </center>
-    
+    </form>
+
 </div>
+<br><br>
+
+<div class='row dashboard-cards'>
+ 
+
+
+{% for x in enhancementdata %}
+<div class='mytile'>
+  <div class='card col-md-4 '>
+   
+    
+    <div class='card-title'>
+      <h2>
+        {{x.psummary}} 
+        <small>{{x.ptype}}</small>
+      </h2>
+      <div class='task-count'>
+       <small> {{x.ID}}</small>
+      </div>
+    </div>
+
+    <div class='card-flap flap1'>
+      <div class='card-description'>
+        <ul class='task-list'>
+          <li>
+           {{x.pdescription}}
+            <span>Problem Description</span>
+          </li>
+          <li>
+            {{x.kanalysis}}
+             <span>Knowledge Analysis</span>
+           </li>
+           <li>
+            {{x.kinsisghts}}
+             <span>Knowledge Insights</span>
+           </li>
+           <li>
+            {{x.owner}}
+             <span>Owner</span>
+           </li>
+        </ul>
+      </div>
+    </div>
+
+  </div> 
+</div>
+  {% endfor %}
+  </div>
+  
+</section>
+ 
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'>
+</script>
+<script>
+  $(document).ready(function(){
+    var zindex = 10;
+    
+    $("div.card").click(function(e){
+      e.preventDefault();
+  
+      var isShowing = false;
+  
+      if ($(this).hasClass("d-card-show")) {
+        isShowing = true
+      }
+  
+      if ($("div.dashboard-cards").hasClass("showing")) {
+        $("div.card.d-card-show")
+          .removeClass("d-card-show");
+  
+        if (isShowing) {
+          $("div.dashboard-cards")
+            .removeClass("showing");
+        } else {
+          $(this)
+            .css({zIndex: zindex})
+            .addClass("d-card-show");
+  
+        }
+  
+        zindex++;
+  
+      } else {
+        $("div.dashboard-cards")
+          .addClass("showing");
+        $(this)
+          .css({zIndex:zindex})
+          .addClass("d-card-show");
+  
+        zindex++;
+      }
+      
+    });
+  });
+</script>
+<script>
+  // JavaScript code
+function search_kp() {
+	let input = document.getElementById('searchitem').value
+	input=input.toLowerCase();
+	let x = document.getElementsByClassName('mytile');
+	for (i = 0; i < x.length; i++) {
+		if (!x[i].innerHTML.toLowerCase().includes(input)) {
+			x[i].style.display="none";
+		}
+		else {
+			x[i].style.display="block";				
+		}
+	}
+}
+
+</script>
+
 </body>
-</html> 
+</html>

@@ -99,7 +99,6 @@ def index(request):
 
 
     return render(request, "authentication/index.html", {'data': dataJSON})
-
 def about(request):
     return render(request, 'authentication/about.html') 
 
@@ -424,28 +423,34 @@ def freshdeskdisplay(request):
 
 
 def jira(request):
-    conn = mod4.connect("User=mangalyogesh.22@gmail.com;APIToken=el2xmpup6oRO1ZNcJhWtE902;Url=https://knowledgeplatform.atlassian.net")
-    cur = conn.execute("SELECT Id, Name, Key FROM Projects")
-    rs = cur.fetchall()
-    for row in rs:
-        print(row)
+    conn = mod4.connect("User=knowledgeplatform64@gmail.com;APIToken=pp2JzKWK1M7Oo4MqfgjV524F;Url=https://knowledgeplatform64.atlassian.net")
+    # cur = conn.execute("SELECT Summary, Id, Description FROM Issues where id=10000")
+    if request.method == 'POST':
+        bug_id = request.POST['jiraid']
+        print(bug_id)
+        cmd = "SELECT Summary, Id, Description FROM Issues WHERE Id = ?"
+        params = [bug_id]
+        cur = conn.execute(cmd, params)
+        rs = cur.fetchall()
+        for row in rs:
+            print(row)
 
 
-    global d
-    d = {'Id':[], 'Name':[], 'Key':[]}
+        global d
+        d = {'Summary':[], 'BugId':[], 'Description':[]}
 
-    for t in rs:
-        # print("Hello")
-        d['Id'].append(t[0]);
-        d['Name'].append(t[1]);
-        d['Key'].append(t[2])
-    print(d)
+        for t in rs:
+            # print("Hello")
+            d['Summary'].append(t[0]);
+            d['BugId'].append(t[1]);
+            d['Description'].append(t[2])
+        print(d)
 
     return render(request,'knowledgepages/jira.html')
 
 
 def jiradisplay(request):
-    ml=zip(d['Id'],d['Name'],d['Key'])
+    ml=zip(d['Summary'],d['BugId'],d['Description'])
     context={'ml':ml,}
     return render(request,'knowledgepages/jiradisplay.html',context)
 
@@ -550,7 +555,6 @@ def update_data(request):
         p4=x['products']
         p5=x['kanalysis']
         p6=x['kinsisghts']
-        p7=x['tags']
     if request.method=="POST":
         ptype=request.POST['ptype']
         print(ptype,"ptype h ye")
@@ -571,11 +575,8 @@ def update_data(request):
         kinsisghts=request.POST['kinsisghts']
         if(kinsisghts==""):
             kinsisghts=p6
-        tags=request.POST['tags']
-        if(tags==""):
-            tags=p7
 
-        db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'tags':tags,'owner':gfName})    
+        db.knowledge.update({'ID':uniqueId},{'ID':uniqueId,'ptype':ptype,'psummary':psummary,'pdescription':pdescription,'products':products,'kanalysis':kanalysis,'kinsisghts':kinsisghts,'owner':gfName})    
         messages.success(request, "Data Updated Successfully")
 
     return render(request, "authentication/index.html")       
@@ -702,3 +703,37 @@ def change_password_form(request):
             return render(request,"authentication/signin.html")
         
     return render(request,'authentication/change_password_form.html')
+
+def contribute_bug(request):
+    global d
+    psummary=d['Summary'][0]
+    pdescription=d['Description'][0]
+    bid=str(d['BugId'][0])
+    if request.method == "POST":
+        ptype=request.POST['ptype']
+        products=request.POST.getlist('CD')
+        kanalysis=request.POST['kanalysis']
+        kinsisghts=request.POST['kinsisghts']
+        owner=request.POST['owner']     
+        
+        
+        conn = MongoClient()
+        db=conn.Lucid
+        collection=db.knowledge
+        rec1={
+                  
+          "ptype":ptype,
+          "psummary":psummary,
+          "pdescription":pdescription,
+          "products":products,
+          "kanalysis":kanalysis,
+          "kinsisghts":kinsisghts,
+          "tags":finaltags,
+          "owner":owner,
+          "BugId":bid,
+          "ID" : owner[:3] + str(len(psummary)) + str(len(pdescription)) +str(len(kinsisghts) + len(kanalysis)),                 
+        }
+        collection.insert_one(rec1)
+        messages.success(request, 'Your message has been sent!')
+        return redirect('home')
+    return render(request,'authentication/contribute_bug.html')

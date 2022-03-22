@@ -77,27 +77,29 @@
           {% endif %}
         </div>
       </nav>
-    <section style="background-color:#00a0ff; height:25; " >
-        <br>
-          <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
-          <br><br>
-          <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
-      </section><br>
-      <center>
-        <form action="jiradisplay" method="post">
-            {% csrf_token %}
-        <label for="jiraid">Enter Jiraid:</label>
-        <input type="text" id="jiraid" name="jiraid"><br><br>
-        <label for="pname">Enter your Project Name:</label>
-        <input type="text" id="pname" name="pname"><br><br>
-        <label for="email">Email: </label>
-        <input type="email" id="email" name="email"><br><br>
-        <label for="token">Token: </label>
-        <input type="text" id="token" name="token"><br><br>
+      <div class="container">
+        <div class="row m-5 no-gutters shadow-lg">
+          <div class="col-md-6 d-none d-md-block">
+            <img src="/static/33.png" class="img-fluid" style="min-height:100%;" />
+          </div>
+          <div class="col-md-6 bg-white p-5">
+            <h3 class="text-center"><strong>Bug Detection using JIRA</strong></h3><br>
+            <div class="form-style">
+              <form action="jira" method="post">
+                {% csrf_token %}
+                <div class="form-group pb-3">
+                  <input type="text" placeholder="Enter Bug ID" name="jiraid" class="form-control" id="jiraid">
+                </div>
+               
+                <div class="pb-2">
+                  <button type="submit" class="btn btn-dark w-100 font-weight-bold mt-2">Submit</button>
+                </div>
 
-        <button type="submit">GetDetails</button>
-        </form>
-    </center>
+                <div class="pb-2">
+                  <a class="btn btn-dark w-100 font-weight-bold mt-2" href="jiradisplay">Get Details</a>
+                </div>
+
+              </form>
     
 </body>
 </html>

@@ -45,5 +45,6 @@ urlpatterns = [
    path('forget_password',views.forget_password,name='forget_password'),
    path('activate2/<uidb64>/<token>/', views.activate2, name="activate2"),
    path('change_password_form', views.change_password_form, name="change_password_form"),
+   path('contribute_bug', views.contribute_bug, name="contribute_bug"),
 
 ]

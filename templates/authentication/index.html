@@ -152,7 +152,24 @@ main .list .item:hover {
   box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
 
-
+#upt2
+{
+  float:right;
+  color:black;
+  background:#00a0ff;
+  text-decoration:none; 
+  font-family:Arial; 
+  height:30px;
+  text-align:center;
+  border:2px solid green;
+  border-radius:8px;
+  margin:8px;
+  padding:0px 10px;
+}
+#upt2:hover
+{
+  background:grey;
+}
 </style>
 
 
@@ -275,12 +292,10 @@ main .list .item:hover {
         
         
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            <strong>Message:</strong> {{ message }}
-            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-        </div>
+        {% comment %} <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"> {% endcomment %}
+            <script class="alert alert-{{ message.tags}}">
+              alert('Message: {{ message }}');
+            </script>
         {% endfor %} 
 
         <div class="carousel-item">
@@ -316,6 +331,11 @@ main .list .item:hover {
 <header style="background-color:linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%) ";>
 <h1>Knowledges</h1>
 </header>
+<div class="upt"
+  <button><a id="upt2" href="update_contribution">Update and Delete Knowledge</a></button>
+</div>
+<br>
+<br>
 <main style="background:linear-gradient( rgba(0, 160, 255, 0.5) 100%, rgba(0, 144, 229, 0.5)100%),url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
 <div class="list" id="list"></div>
 <div class="pagenumbers" id="pagination"></div>
