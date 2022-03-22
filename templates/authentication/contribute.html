@@ -281,6 +281,20 @@ main .list .item:hover {
               Issue Tracking
             </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+             <a class="dropdown-item" href="defects">Defects</a>
+            {% comment %} Neo4j  {% endcomment %}
+            <a class="dropdown-item" href="enhancements">Enhancement</a>
+            <a class="dropdown-item" href="opportunity">Opportunity</a>
+            <a class="dropdown-item" href="supportticket">Support Ticket</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Issue Tracking
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
             <a class="dropdown-item" href="jira">Jira</a>
             <a class="dropdown-item" href="salesforce">Salesforce</a>
             <a class="dropdown-item" href="freshdesk">FreshDesk</a>

@@ -322,7 +322,7 @@ def supportticket(request):
     conn = MongoClient()
     db=conn.Lucid
     collection=db.knowledge
-    supportdata =collection.find({'ptype':'supportticket'})
+    supportdata =collection.find({'ptype':'support Ticket'})
     return render(request, 'knowledgepages/supportticket.html', {'supportdata': supportdata.clone()})
 
 def opportunity(request):
@@ -423,7 +423,7 @@ def freshdeskdisplay(request):
 
 
 def jira(request):
-    conn = mod4.connect("User=knowledgeplatform64@gmail.com;APIToken=Q5J8Y9Yp7y2OmpEclNUk68A7;Url=https://knowledgeplatform64.atlassian.net")
+    conn = mod4.connect("User=knowledgeplatform64@gmail.com;APIToken=IMg5Kz6LMqDBkwwJy86p8D9B;Url=https://knowledgeplatform64.atlassian.net")
     # cur = conn.execute("SELECT Summary, Id, Description FROM Issues where id=10000")
     if request.method == 'POST':
         bug_id = request.POST['jiraid']
